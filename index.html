@@ -13,52 +13,47 @@
 html,body{width:100%;height:100%;overflow:hidden;font-family:'Rajdhani',-apple-system,BlinkMacSystemFont,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0508;color:#fff}
 canvas{display:block;touch-action:none;width:100%;height:100%}
 
-/* --- UI KATMANI --- */
-#ui{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:10;font-family:'Rajdhani',sans-serif}
+/* --- ÜST BİLGİ PANELİ (YENİ) --- */
+#topPanel{position:fixed;top:0;left:0;right:0;height:50px;background:linear-gradient(180deg,rgba(10,5,8,0.95),rgba(10,5,8,0.7));border-bottom:1px solid rgba(208,160,64,0.3);z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 12px;pointer-events:none;font-family:'Rajdhani',sans-serif}
+#topPanel .left{display:flex;align-items:center;gap:8px}
+#topPanel .center{position:absolute;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:18px;font-weight:900;color:#ffd166;text-shadow:0 0 15px rgba(255,209,102,0.4);letter-spacing:2px}
+#topPanel .right{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:700;color:#c0b090}
+#topPanel .right span{color:#ffd166;font-weight:800;text-shadow:0 0 10px rgba(255,209,102,0.3)}
 
-/* Barlar */
-.bar{position:absolute;background:rgba(0,0,0,0.7);border:1px solid rgba(208,160,64,0.3);border-radius:6px;overflow:hidden;box-shadow:0 0 15px rgba(0,0,0,0.8), inset 0 0 10px rgba(0,0,0,0.5)}
-.bar-fill{height:100%;transition:width 0.15s linear;position:relative}
-.bar-fill::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(255,255,255,0.25),transparent);}
-#hpBar{top:16px;left:16px;width:220px;height:22px;border-color:rgba(200,50,50,0.4)}
-#hpFill{background:linear-gradient(90deg,#5a0808,#c03030,#ff6060);box-shadow:0 0 10px rgba(192,48,48,0.6)}
-#xpBar{top:44px;left:16px;width:220px;height:12px;border-color:rgba(80,180,80,0.3)}
-#xpFill{background:linear-gradient(90deg,#1a4a1a,#5fa35f,#a0ffa0);box-shadow:0 0 10px rgba(95,163,95,0.6)}
+/* --- XP BAR (YENİ STİL) --- */
+#xpBarContainer{position:fixed;top:50px;left:0;right:0;height:8px;background:rgba(0,0,0,0.8);z-index:20;border-bottom:1px solid rgba(208,160,64,0.2)}
+#xpFill{height:100%;width:0%;background:linear-gradient(90deg,#5a2a8a,#a060d0,#d0a0ff);transition:width 0.2s linear;box-shadow:0 0 15px rgba(160,96,208,0.6)}
 
-/* Boss Bar */
-#bossBar{position:absolute;top:80px;left:50%;transform:translateX(-50%);width:min(320px,70vw);height:16px;background:rgba(0,0,0,0.85);border:1px solid #8a2020;border-radius:8px;overflow:hidden;display:none;box-shadow:0 0 20px rgba(138,32,32,0.5)}
+/* --- CAN BAR (YENİ STİL) --- */
+#hpBarContainer{position:fixed;top:58px;left:12px;width:180px;height:14px;background:rgba(0,0,0,0.8);z-index:20;border:1px solid rgba(200,50,50,0.4);border-radius:4px;overflow:hidden;box-shadow:0 0 10px rgba(0,0,0,0.5)}
+#hpFill{height:100%;width:100%;background:linear-gradient(90deg,#5a0808,#c03030,#ff6060);transition:width 0.15s linear;box-shadow:0 0 10px rgba(192,48,48,0.6)}
+#hpText{position:absolute;top:58px;left:200px;font-size:11px;font-weight:800;color:#c0b090;z-index:20;text-shadow:0 0 5px #000}
+
+/* --- SİLAH İKONLARI (YENİ) --- */
+#weaponIcons{position:fixed;top:78px;left:12px;display:flex;gap:6px;z-index:20}
+.weaponIcon{width:32px;height:32px;background:rgba(20,15,10,0.9);border:1px solid rgba(160,140,100,0.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;position:relative;box-shadow:0 0 8px rgba(0,0,0,0.5)}
+.weaponIcon.evolved{border-color:#ffd166;box-shadow:0 0 12px rgba(255,209,102,0.4)}
+.weaponIcon .lvl{position:absolute;bottom:-2px;right:-2px;font-size:9px;font-weight:900;color:#ffd166;background:#000;padding:0 3px;border-radius:3px;border:1px solid #ffd166}
+
+/* --- BOSS BAR --- */
+#bossBar{position:fixed;top:95px;left:50%;transform:translateX(-50%);width:min(320px,70vw);height:14px;background:rgba(0,0,0,0.85);border:1px solid #8a2020;border-radius:8px;overflow:hidden;display:none;box-shadow:0 0 20px rgba(138,32,32,0.5);z-index:20}
 #bossBarFill{height:100%;background:linear-gradient(90deg,#8a2020,#d04040,#4a1a5a);transition:width 0.1s linear;box-shadow:0 0 15px rgba(208,64,64,0.8)}
-#bossName{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:14px;font-weight:900;color:#ff6060;letter-spacing:3px;text-shadow:0 0 15px #ff2020;display:none}
+#bossName{position:fixed;top:80px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:12px;font-weight:900;color:#ff6060;letter-spacing:3px;text-shadow:0 0 15px #ff2020;display:none;z-index:20}
 
-/* İstatistikler */
-#stats{position:absolute;top:16px;right:16px;text-align:right;font-size:14px;font-weight:700;line-height:1.9;text-shadow:0 2px 8px #000;color:#c0b090;background:rgba(0,0,0,0.4);padding:8px 12px;border-radius:8px;border:1px solid rgba(160,140,100,0.15);backdrop-filter:blur(4px)}
-#stats span{color:#ffd166;font-weight:800;text-shadow:0 0 10px rgba(255,209,102,0.5)}
-
-/* Combo & Milestone */
-#comboBadge{position:absolute;top:130px;left:50%;transform:translateX(-50%) scale(0);background:linear-gradient(135deg,#8a3010,#ffb020);color:#0a0a14;padding:8px 24px;border-radius:30px;font-size:16px;font-weight:900;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 30px rgba(255,176,32,0.6);letter-spacing:1px}
+/* --- DİĞER UI ÖĞELERİ --- */
+#comboBadge{position:fixed;top:130px;left:50%;transform:translateX(-50%) scale(0);background:linear-gradient(135deg,#8a3010,#ffb020);color:#0a0a14;padding:8px 24px;border-radius:30px;font-size:16px;font-weight:900;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 30px rgba(255,176,32,0.6);letter-spacing:1px;z-index:20}
 #comboBadge.show{transform:translateX(-50%) scale(1)}
-#milestone{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.5);font-family:'Cinzel',serif;font-size:48px;font-weight:900;color:#ffd166;letter-spacing:6px;text-shadow:0 0 30px #ffb020, 0 0 60px #8a3010, 0 4px 20px #000;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);opacity:0;pointer-events:none}
+#milestone{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.5);font-family:'Cinzel',serif;font-size:48px;font-weight:900;color:#ffd166;letter-spacing:6px;text-shadow:0 0 30px #ffb020, 0 0 60px #8a3010, 0 4px 20px #000;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);opacity:0;pointer-events:none;z-index:30}
 #milestone.show{transform:translate(-50%,-50%) scale(1);opacity:1}
-
-/* Silah Listesi */
-#weaponList{position:absolute;bottom:16px;left:16px;font-size:13px;font-weight:700;line-height:1.8;text-shadow:0 2px 4px #000;max-width:240px;color:#c0b090;display:flex;flex-wrap:wrap;gap:6px}
-#weaponList .w{background:rgba(20,15,10,0.8);border:1px solid rgba(160,140,100,0.2);border-radius:8px;padding:5px 10px;backdrop-filter:blur(4px);transition:all 0.2s}
-#weaponList .w.evolved{border-color:#ffd166;background:rgba(255,209,102,0.15);color:#ffd166;box-shadow:0 0 15px rgba(255,209,102,0.3)}
-
-/* Toast (Bildirim) */
-#toast{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%) translateY(-30px);background:rgba(15,10,8,0.95);border:1px solid #ffd166;border-radius:14px;padding:14px 24px;font-size:15px;font-weight:800;color:#ffd166;text-align:center;opacity:0;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;max-width:80vw;box-shadow:0 0 30px rgba(255,209,102,0.2);backdrop-filter:blur(8px)}
+#toast{position:fixed;top:35%;left:50%;transform:translate(-50%,-50%) translateY(-30px);background:rgba(15,10,8,0.95);border:1px solid #ffd166;border-radius:14px;padding:14px 24px;font-size:15px;font-weight:800;color:#ffd166;text-align:center;opacity:0;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;max-width:80vw;box-shadow:0 0 30px rgba(255,209,102,0.2);backdrop-filter:blur(8px);z-index:30}
 #toast.show{opacity:1;transform:translate(-50%,-50%) translateY(0)}
 #toast .sub{font-size:12px;color:rgba(200,180,140,0.8);margin-top:4px;font-weight:600}
-
-/* Wave Banner */
-#waveBanner{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%) scale(0.3);font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:#ff6060;letter-spacing:4px;text-shadow:0 0 30px #ff2020, 0 4px 20px #000;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);opacity:0;pointer-events:none;text-align:center;line-height:1.4}
+#waveBanner{position:fixed;top:30%;left:50%;transform:translate(-50%,-50%) scale(0.3);font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:#ff6060;letter-spacing:4px;text-shadow:0 0 30px #ff2020, 0 4px 20px #000;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);opacity:0;pointer-events:none;text-align:center;line-height:1.4;z-index:30}
 #waveBanner.show{transform:translate(-50%,-50%) scale(1);opacity:1}
 #waveBanner .sub{font-size:15px;color:#c0b090;letter-spacing:2px;margin-top:8px;font-family:'Rajdhani',sans-serif}
 
 /* --- EKRANLAR --- */
 .screen{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,3,5,0.92);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;pointer-events:auto;overflow-y:auto;backdrop-filter:blur(8px)}
-
-/* Level Up Ekranı */
 #levelUpScreen h1{font-family:'Cinzel',serif;font-size:32px;color:#ffd166;letter-spacing:3px;margin-bottom:12px;text-shadow:0 0 30px rgba(255,209,102,0.5)}
 .upgradeCard{width:min(340px,90vw);padding:16px 20px;background:linear-gradient(135deg,rgba(60,40,80,0.8),rgba(40,20,50,0.6));border:1px solid rgba(160,100,200,0.4);border-radius:14px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.2s;backdrop-filter:blur(8px);box-shadow:0 4px 20px rgba(0,0,0,0.5)}
 .upgradeCard:hover{transform:translateY(-2px);border-color:#ffd166;box-shadow:0 0 25px rgba(255,209,102,0.2)}
@@ -68,14 +63,10 @@ canvas{display:block;touch-action:none;width:100%;height:100%}
 .upgradeCard .name{font-size:16px;font-weight:800;color:#ffd166;font-family:'Cinzel',serif;letter-spacing:1px}
 .upgradeCard .desc{font-size:12px;color:rgba(200,180,140,0.8);margin-top:3px;font-weight:600}
 .upgradeCard .lvl{font-size:11px;color:#a060d0;font-weight:800;margin-top:4px;letter-spacing:1px}
-
-/* Başlangıç Ekranı */
 #startScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center,#1a0808 0%,#050205 100%);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;pointer-events:auto;overflow-y:auto}
 #startScreen h1{font-family:'Cinzel',serif;font-size:38px;font-weight:900;letter-spacing:6px;text-align:center;background:linear-gradient(135deg,#ff6060,#ffd166);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(255,96,96,0.4));margin-bottom:4px}
 #startScreen .sub{font-size:13px;color:rgba(160,140,100,0.6);margin-top:-8px;letter-spacing:4px;font-weight:600}
 .sectionTitle{font-family:'Cinzel',serif;font-size:13px;font-weight:800;color:rgba(255,209,102,0.7);letter-spacing:3px;margin-top:10px;margin-bottom:4px;text-shadow:0 0 15px rgba(255,209,102,0.2)}
-
-/* Karakter Kartları */
 .charGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:min(380px,92vw)}
 .charCard{padding:10px 6px;background:rgba(30,20,15,0.7);border:1px solid rgba(100,80,60,0.3);border-radius:12px;cursor:pointer;text-align:center;transition:all 0.25s;backdrop-filter:blur(4px)}
 .charCard:hover{border-color:rgba(255,209,102,0.5);transform:translateY(-2px)}
@@ -84,8 +75,6 @@ canvas{display:block;touch-action:none;width:100%;height:100%}
 .charCard .emoji{font-size:26px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))}
 .charCard .name{font-size:12px;font-weight:800;margin-top:4px;color:#e0c080;font-family:'Cinzel',serif;letter-spacing:0.5px}
 .charCard .wep{font-size:9px;color:rgba(160,140,100,0.7);margin-top:2px;font-weight:600}
-
-/* Harita Kartları */
 .mapGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:min(380px,92vw)}
 .mapCard{padding:8px;background:rgba(30,20,15,0.7);border:1px solid rgba(100,80,60,0.3);border-radius:12px;cursor:pointer;text-align:center;position:relative;overflow:hidden;transition:all 0.25s;backdrop-filter:blur(4px)}
 .mapCard:hover{border-color:rgba(255,209,102,0.5);transform:translateY(-2px)}
@@ -95,22 +84,14 @@ canvas{display:block;touch-action:none;width:100%;height:100%}
 .mapCard .name{font-size:11px;font-weight:800;margin-top:2px;color:#e0c080;font-family:'Cinzel',serif;letter-spacing:0.5px}
 .mapCard .lock{font-size:9px;color:#ff6060;margin-top:3px;line-height:1.3;font-weight:700}
 .mapCard .lockIcon{position:absolute;top:6px;right:8px;font-size:16px;z-index:2;filter:drop-shadow(0 0 5px rgba(255,96,96,0.8))}
-
-/* Altın Kutusu */
 .goldBox{background:linear-gradient(135deg,rgba(255,209,102,0.15),rgba(255,176,32,0.05));border:1px solid rgba(255,209,102,0.4);border-radius:12px;padding:8px 20px;font-size:15px;font-weight:800;color:#ffd166;box-shadow:0 0 20px rgba(255,209,102,0.15);backdrop-filter:blur(4px);letter-spacing:1px}
-
-/* Başlangıç Butonları */
 #startScreen button{padding:14px 40px;font-family:'Cinzel',serif;font-size:16px;font-weight:900;color:#0a0508;background:linear-gradient(135deg,#ffd166,#ffb020);border:none;border-radius:14px;cursor:pointer;box-shadow:0 0 30px rgba(255,176,32,0.4), 0 8px 24px rgba(0,0,0,0.5);pointer-events:auto;margin-top:8px;letter-spacing:2px;transition:all 0.25s;position:relative;overflow:hidden}
 #startScreen button:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(255,176,32,0.6), 0 12px 30px rgba(0,0,0,0.6)}
 #startScreen button:active{transform:scale(0.97)}
 #startScreen button.sec{background:rgba(30,20,15,0.8);color:#c0b090;box-shadow:none;font-size:13px;padding:10px 24px;font-family:'Rajdhani',sans-serif;font-weight:700;border:1px solid rgba(160,140,100,0.3);letter-spacing:1px}
 #startScreen button.sec:hover{border-color:#ffd166;color:#ffd166;background:rgba(255,209,102,0.1)}
-
-/* Yaşam Boyu İstatistikler */
 #lifetimeStats{display:flex;gap:16px;font-size:12px;color:rgba(160,140,100,0.7);margin-top:0;font-weight:600;background:rgba(0,0,0,0.3);padding:6px 16px;border-radius:20px;border:1px solid rgba(160,140,100,0.1)}
 #lifetimeStats span{color:#ffd166;font-weight:800}
-
-/* Oyun Sonu Ekranı */
 #gameOverScreen h1{font-family:'Cinzel',serif;font-size:42px;color:#ff4040;letter-spacing:6px;margin-bottom:12px;text-shadow:0 0 40px rgba(255,64,64,0.6)}
 #gameOverScreen .stat{font-size:15px;color:rgba(200,180,140,0.8);font-weight:600}
 #gameOverScreen .stat b{color:#ffd166;font-size:20px;font-family:'Cinzel',serif}
@@ -119,8 +100,6 @@ canvas{display:block;touch-action:none;width:100%;height:100%}
 #gameOverScreen button:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(255,176,32,0.6)}
 #gameOverScreen button.sec{background:rgba(30,20,15,0.8);color:#c0b090;box-shadow:none;font-size:13px;padding:10px 24px;font-family:'Rajdhani',sans-serif;font-weight:700;border:1px solid rgba(160,140,100,0.3)}
 #gameOverScreen button.sec:hover{border-color:#ffd166;color:#ffd166}
-
-/* Meta Ekranı */
 #metaScreen h1{font-family:'Cinzel',serif;font-size:28px;color:#ffd166;margin-bottom:8px;text-shadow:0 0 30px rgba(255,209,102,0.4);letter-spacing:2px}
 #metaScreen .goldShow{font-size:18px;color:#ffd166;font-weight:800;margin-bottom:12px;text-shadow:0 0 15px rgba(255,209,102,0.4)}
 .metaRow{width:min(360px,92vw);padding:12px 16px;background:rgba(30,20,15,0.7);border:1px solid rgba(100,80,60,0.3);border-radius:12px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:6px;transition:all 0.2s;backdrop-filter:blur(4px)}
@@ -133,34 +112,46 @@ canvas{display:block;touch-action:none;width:100%;height:100%}
 .metaRow .price{font-size:14px;color:#ffd166;font-weight:800;background:rgba(255,209,102,0.1);padding:4px 10px;border-radius:8px;border:1px solid rgba(255,209,102,0.2)}
 #metaScreen button{margin-top:16px;padding:12px 36px;font-family:'Cinzel',serif;font-size:15px;font-weight:900;color:#0a0508;background:linear-gradient(135deg,#ffd166,#ffb020);border:none;border-radius:14px;cursor:pointer;box-shadow:0 0 30px rgba(255,176,32,0.4);transition:all 0.25s;letter-spacing:1px}
 #metaScreen button:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(255,176,32,0.6)}
-
-/* İstatistik Grid */
 .statsGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:min(360px,92vw);margin-top:12px}
 .statItem{background:rgba(30,20,15,0.7);padding:10px;border-radius:10px;font-size:11px;color:rgba(160,140,100,0.7);font-weight:600;border:1px solid rgba(100,80,60,0.2);backdrop-filter:blur(4px)}
 .statItem b{display:block;font-size:18px;color:#ffd166;margin-top:4px;font-family:'Cinzel',serif}
 </style>
 </head>
 <body>
-
 <canvas id="c"></canvas>
 
-<div id="ui">
-<div class="bar" id="hpBar"><div class="bar-fill" id="hpFill" style="width:100%"></div></div>
-<div class="bar" id="xpBar"><div class="bar-fill" id="xpFill" style="width:0%"></div></div>
+<!-- YENİ ÜST PANEL -->
+<div id="topPanel">
+<div class="left">
+<div class="weaponIcon" id="wIcon0">🗡️</div>
+<div class="weaponIcon" id="wIcon1">✨</div>
+<div class="weaponIcon" id="wIcon2">✨</div>
+<div class="weaponIcon" id="wIcon3">✨</div>
+<div class="weaponIcon" id="wIcon4">✨</div>
+</div>
+<div class="center" id="timeDisplay">00:00</div>
+<div class="right">
+<div>💰 <span id="goldDisplay">0</span></div>
+<div>💀 <span id="killsDisplay">0</span></div>
+</div>
+</div>
+
+<!-- YENİ XP BAR -->
+<div id="xpBarContainer"><div id="xpFill"></div></div>
+
+<!-- YENİ CAN BAR -->
+<div id="hpBarContainer"><div id="hpFill"></div></div>
+<div id="hpText">100 / 100</div>
+
+<!-- BOSS BAR -->
 <div id="bossName">BOSS</div>
 <div id="bossBar"><div id="bossBarFill" style="width:100%"></div></div>
-<div id="stats">
-⏱ <span id="time">00:00</span><br>
-💀 <span id="kills">0</span><br>
-⭐ <span id="level">1</span><br>
-💰 <span id="gold">0</span>
-</div>
+
+<!-- DİĞER UI -->
 <div id="comboBadge"></div>
 <div id="milestone"></div>
 <div id="waveBanner"></div>
 <div id="toast"></div>
-<div id="weaponList"></div>
-</div>
 
 <div id="startScreen">
 <h1>NIGHTFALL</h1>
@@ -206,7 +197,7 @@ canvas{display:block;touch-action:none;width:100%;height:100%}
 </div>
 
 <script>
-  (function(){
+(function(){
 'use strict';
 
 window.onerror = function(msg, url, line){
@@ -232,7 +223,7 @@ function resize(){
 window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', function(){ setTimeout(resize, 200); });
 
-var SAVE_KEY = 'nightfall_save_v3';
+var SAVE_KEY = 'nightfall_save_v4';
 var meta = { gold:0, upgrades:{hp:0,damage:0,speed:0,cooldown:0,crit:0,regen:0}, lifetimeKills:0, lifetimeBosses:0, lifetimeGoldSpent:0 };
 try {
   var raw = localStorage.getItem(SAVE_KEY);
@@ -604,6 +595,35 @@ var EVOLUTIONS = {
   iceSpear: { passive:'crit', name:'Buz Kırağı' },
   flameSword: { passive:'damage', name:'Alev Fırtınası' }
 };
+
+// Silah ikonları için emoji haritası
+var WEAPON_ICONS = {
+  knife:'🗡️', spear:'🔱', fireball:'🔥', lightning:'⚡', boomerang:'🪃',
+  poison:'☠️', hammer:'🔨', iceSpear:'❄️', flameSword:'⚔️'
+};
+
+function updateWeaponIcons(){
+  var all = ['knife','spear','fireball','lightning','boomerang','poison','hammer','iceSpear','flameSword'];
+  var active = [];
+  for (var i=0;i<all.length;i++){
+    var w = weapons[all[i]];
+    if (w && w.level > 0) active.push({ key: all[i], w: w });
+  }
+  for (var i=0;i<5;i++){
+    var el = document.getElementById('wIcon'+i);
+    if (!el) continue;
+    if (i < active.length){
+      var a = active[i];
+      el.textContent = WEAPON_ICONS[a.key] || '✨';
+      el.className = 'weaponIcon' + (a.w.evolved ? ' evolved' : '');
+      el.innerHTML = (WEAPON_ICONS[a.key] || '✨') + '<div class="lvl">' + a.w.level + '</div>';
+    } else {
+      el.textContent = '·';
+      el.className = 'weaponIcon';
+      el.style.opacity = '0.3';
+    }
+  }
+}
 
 function showToast(title, sub){
   var t = document.getElementById('toast');
@@ -1391,6 +1411,7 @@ function pickUpgrade(o){
   document.getElementById('levelUpScreen').style.display = 'none';
   STATE = 'playing';
   lastTime = performance.now();
+  updateWeaponIcons();
 }
 
 function render(){
@@ -1623,33 +1644,14 @@ function render(){
 
 function updateUI(){
   document.getElementById('hpFill').style.width = Math.max(0, player.hp/player.maxHp*100)+'%';
+  document.getElementById('hpText').textContent = Math.ceil(player.hp) + ' / ' + player.maxHp;
   document.getElementById('xpFill').style.width = Math.min(100, player.xp/player.xpNext*100)+'%';
   var sec = Math.floor(gameTime/1000);
   var m = Math.floor(sec/60), s = sec%60;
-  document.getElementById('time').textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
-  document.getElementById('kills').textContent = kills;
-  document.getElementById('level').textContent = player.level;
-  document.getElementById('gold').textContent = goldCollected;
-  var wl = document.getElementById('weaponList');
-  wl.innerHTML = '';
-  var names = { knife:'Bıçak', spear:'Mızrak', fireball:'Ateş', lightning:'Şimşek', boomerang:'Bumerang', poison:'Zehir', hammer:'Çekiç', iceSpear:'Buz Mızrağı', flameSword:'Alev Kılıcı' };
-  for (var key in weapons){
-    var w = weapons[key];
-    if (!w || w.level <= 0) continue;
-    var EVO = EVOLUTIONS[key];
-    var div = document.createElement('div');
-    div.className = 'w' + (w.evolved ? ' evolved' : '');
-    div.textContent = (w.evolved ? EVO.name : names[key]) + ' Lv' + w.level + (w.evolved ? ' ⚡' : '');
-    wl.appendChild(div);
-  }
-  for (var pk in passives){
-    var p = passives[pk];
-    if (p.level <= 0) continue;
-    var div2 = document.createElement('div');
-    div2.className = 'w';
-    div2.textContent = p.icon+' '+p.name+' Lv'+p.level;
-    wl.appendChild(div2);
-  }
+  document.getElementById('timeDisplay').textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  document.getElementById('killsDisplay').textContent = kills;
+  document.getElementById('goldDisplay').textContent = goldCollected;
+  updateWeaponIcons();
 }
 
 function loop(t){
@@ -1718,6 +1720,7 @@ function resetGame(){
   input.active = false; input.mag = 0;
   document.getElementById('bossBar').style.display = 'none';
   document.getElementById('bossName').style.display = 'none';
+  updateWeaponIcons();
 }
 
 function startGame(){
@@ -1899,11 +1902,12 @@ canvas.addEventListener('pointerup', onUp, {passive:false});
 canvas.addEventListener('pointercancel', onUp, {passive:false});
 canvas.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
-// Başlatma sırası düzeltildi:
+// BAŞLATMA
 renderCharGrid();
 renderMapGrid();
 updateStartScreenStats();
 resize();
+updateWeaponIcons();
 requestAnimationFrame(loop);
 
 })();
