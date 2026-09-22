@@ -6,86 +6,137 @@
 <meta name="theme-color" content="#0a0508">
 <title>Nightfall</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0508;color:#fff}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Rajdhani',-apple-system,BlinkMacSystemFont,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0508;color:#fff}
 canvas{display:block;touch-action:none;width:100%;height:100%}
-#ui{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:10}
-.bar{position:absolute;background:rgba(0,0,0,0.8);border:2px solid rgba(160,140,100,0.3);border-radius:4px;overflow:hidden}
-.bar-fill{height:100%;transition:width 0.15s linear}
-#hpBar{top:16px;left:16px;width:220px;height:22px}
-#hpFill{background:linear-gradient(90deg,#8a1010,#c03030)}
-#xpBar{top:44px;left:16px;width:220px;height:12px}
-#xpFill{background:linear-gradient(90deg,#3a6a3a,#5fa35f)}
-#bossBar{position:absolute;top:80px;left:50%;transform:translateX(-50%);width:min(320px,70vw);height:16px;background:rgba(0,0,0,0.85);border:2px solid #8a2020;border-radius:4px;overflow:hidden;display:none}
-#bossBarFill{height:100%;background:linear-gradient(90deg,#8a2020,#4a1a5a);transition:width 0.1s linear}
-#bossName{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:800;color:#d04040;letter-spacing:2px;text-shadow:0 2px 6px #000;display:none}
-#stats{position:absolute;top:16px;right:16px;text-align:right;font-size:13px;font-weight:700;line-height:1.7;text-shadow:0 2px 4px #000;color:#c0b090}
-#stats span{color:#d0a040}
-#comboBadge{position:absolute;top:130px;left:50%;transform:translateX(-50%) scale(0);background:linear-gradient(135deg,#8a3010,#c08a20);color:#0a0a14;padding:6px 18px;border-radius:20px;font-size:14px;font-weight:900;transition:transform 0.2s}
+
+/* --- UI KATMANI --- */
+#ui{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:10;font-family:'Rajdhani',sans-serif}
+
+/* Barlar */
+.bar{position:absolute;background:rgba(0,0,0,0.7);border:1px solid rgba(208,160,64,0.3);border-radius:6px;overflow:hidden;box-shadow:0 0 15px rgba(0,0,0,0.8), inset 0 0 10px rgba(0,0,0,0.5)}
+.bar-fill{height:100%;transition:width 0.15s linear;position:relative}
+.bar-fill::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(255,255,255,0.25),transparent);}
+#hpBar{top:16px;left:16px;width:220px;height:22px;border-color:rgba(200,50,50,0.4)}
+#hpFill{background:linear-gradient(90deg,#5a0808,#c03030,#ff6060);box-shadow:0 0 10px rgba(192,48,48,0.6)}
+#xpBar{top:44px;left:16px;width:220px;height:12px;border-color:rgba(80,180,80,0.3)}
+#xpFill{background:linear-gradient(90deg,#1a4a1a,#5fa35f,#a0ffa0);box-shadow:0 0 10px rgba(95,163,95,0.6)}
+
+/* Boss Bar */
+#bossBar{position:absolute;top:80px;left:50%;transform:translateX(-50%);width:min(320px,70vw);height:16px;background:rgba(0,0,0,0.85);border:1px solid #8a2020;border-radius:8px;overflow:hidden;display:none;box-shadow:0 0 20px rgba(138,32,32,0.5)}
+#bossBarFill{height:100%;background:linear-gradient(90deg,#8a2020,#d04040,#4a1a5a);transition:width 0.1s linear;box-shadow:0 0 15px rgba(208,64,64,0.8)}
+#bossName{position:absolute;top:60px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:14px;font-weight:900;color:#ff6060;letter-spacing:3px;text-shadow:0 0 15px #ff2020;display:none}
+
+/* İstatistikler */
+#stats{position:absolute;top:16px;right:16px;text-align:right;font-size:14px;font-weight:700;line-height:1.9;text-shadow:0 2px 8px #000;color:#c0b090;background:rgba(0,0,0,0.4);padding:8px 12px;border-radius:8px;border:1px solid rgba(160,140,100,0.15);backdrop-filter:blur(4px)}
+#stats span{color:#ffd166;font-weight:800;text-shadow:0 0 10px rgba(255,209,102,0.5)}
+
+/* Combo & Milestone */
+#comboBadge{position:absolute;top:130px;left:50%;transform:translateX(-50%) scale(0);background:linear-gradient(135deg,#8a3010,#ffb020);color:#0a0a14;padding:8px 24px;border-radius:30px;font-size:16px;font-weight:900;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 0 30px rgba(255,176,32,0.6);letter-spacing:1px}
 #comboBadge.show{transform:translateX(-50%) scale(1)}
-#milestone{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.5);font-size:42px;font-weight:900;color:#d0a040;letter-spacing:4px;text-shadow:0 4px 20px #000, 0 0 40px #8a3010;transition:all 0.5s cubic-bezier(0.34,1.56,0.64,1);opacity:0;pointer-events:none}
+#milestone{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.5);font-family:'Cinzel',serif;font-size:48px;font-weight:900;color:#ffd166;letter-spacing:6px;text-shadow:0 0 30px #ffb020, 0 0 60px #8a3010, 0 4px 20px #000;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);opacity:0;pointer-events:none}
 #milestone.show{transform:translate(-50%,-50%) scale(1);opacity:1}
-#weaponList{position:absolute;bottom:16px;left:16px;font-size:12px;font-weight:700;line-height:1.8;text-shadow:0 2px 4px #000;max-width:220px;color:#c0b090}
-#weaponList .w{background:rgba(20,15,10,0.8);border:1px solid rgba(160,140,100,0.25);border-radius:6px;padding:4px 8px;margin-bottom:4px;display:inline-block;margin-right:4px}
-#weaponList .w.evolved{border-color:#d0a040;background:rgba(208,160,64,0.15);color:#e0c060}
-#toast{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%) translateY(-30px);background:rgba(15,10,8,0.96);border:2px solid #a08040;border-radius:12px;padding:12px 20px;font-size:14px;font-weight:800;color:#d0a040;text-align:center;opacity:0;transition:all 0.4s;pointer-events:none;max-width:80vw}
+
+/* Silah Listesi */
+#weaponList{position:absolute;bottom:16px;left:16px;font-size:13px;font-weight:700;line-height:1.8;text-shadow:0 2px 4px #000;max-width:240px;color:#c0b090;display:flex;flex-wrap:wrap;gap:6px}
+#weaponList .w{background:rgba(20,15,10,0.8);border:1px solid rgba(160,140,100,0.2);border-radius:8px;padding:5px 10px;backdrop-filter:blur(4px);transition:all 0.2s}
+#weaponList .w.evolved{border-color:#ffd166;background:rgba(255,209,102,0.15);color:#ffd166;box-shadow:0 0 15px rgba(255,209,102,0.3)}
+
+/* Toast (Bildirim) */
+#toast{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%) translateY(-30px);background:rgba(15,10,8,0.95);border:1px solid #ffd166;border-radius:14px;padding:14px 24px;font-size:15px;font-weight:800;color:#ffd166;text-align:center;opacity:0;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;max-width:80vw;box-shadow:0 0 30px rgba(255,209,102,0.2);backdrop-filter:blur(8px)}
 #toast.show{opacity:1;transform:translate(-50%,-50%) translateY(0)}
-#toast .sub{font-size:11px;color:rgba(200,180,140,0.7);margin-top:4px}
-#waveBanner{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%) scale(0.3);font-size:24px;font-weight:900;color:#a04040;letter-spacing:3px;text-shadow:0 4px 20px #000, 0 0 30px #8a1818;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);opacity:0;pointer-events:none;text-align:center;line-height:1.4}
+#toast .sub{font-size:12px;color:rgba(200,180,140,0.8);margin-top:4px;font-weight:600}
+
+/* Wave Banner */
+#waveBanner{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%) scale(0.3);font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:#ff6060;letter-spacing:4px;text-shadow:0 0 30px #ff2020, 0 4px 20px #000;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);opacity:0;pointer-events:none;text-align:center;line-height:1.4}
 #waveBanner.show{transform:translate(-50%,-50%) scale(1);opacity:1}
-#waveBanner .sub{font-size:14px;color:#c0b090;letter-spacing:1px;margin-top:6px}
-.screen{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,3,5,0.96);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;pointer-events:auto;overflow-y:auto}
-#levelUpScreen h1{font-size:26px;color:#d0a040;letter-spacing:2px;margin-bottom:8px}
-.upgradeCard{width:min(340px,90vw);padding:14px 18px;background:linear-gradient(135deg,rgba(60,40,80,0.6),rgba(40,20,50,0.5));border:2px solid rgba(120,80,140,0.6);border-radius:12px;display:flex;align-items:center;gap:12px;cursor:pointer}
-.upgradeCard:active{transform:scale(0.96)}
-.upgradeCard .icon{font-size:28px;width:44px;text-align:center}
+#waveBanner .sub{font-size:15px;color:#c0b090;letter-spacing:2px;margin-top:8px;font-family:'Rajdhani',sans-serif}
+
+/* --- EKRANLAR --- */
+.screen{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,3,5,0.92);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;pointer-events:auto;overflow-y:auto;backdrop-filter:blur(8px)}
+
+/* Level Up Ekranı */
+#levelUpScreen h1{font-family:'Cinzel',serif;font-size:32px;color:#ffd166;letter-spacing:3px;margin-bottom:12px;text-shadow:0 0 30px rgba(255,209,102,0.5)}
+.upgradeCard{width:min(340px,90vw);padding:16px 20px;background:linear-gradient(135deg,rgba(60,40,80,0.8),rgba(40,20,50,0.6));border:1px solid rgba(160,100,200,0.4);border-radius:14px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.2s;backdrop-filter:blur(8px);box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+.upgradeCard:hover{transform:translateY(-2px);border-color:#ffd166;box-shadow:0 0 25px rgba(255,209,102,0.2)}
+.upgradeCard:active{transform:scale(0.97)}
+.upgradeCard .icon{font-size:30px;width:48px;text-align:center;filter:drop-shadow(0 0 8px rgba(255,209,102,0.5))}
 .upgradeCard .info{flex:1}
-.upgradeCard .name{font-size:15px;font-weight:800;color:#e0c080}
-.upgradeCard .desc{font-size:11px;color:rgba(200,180,140,0.6);margin-top:2px}
-.upgradeCard .lvl{font-size:11px;color:#d0a040;font-weight:700;margin-top:2px}
-#startScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center,#1a0808 0%,#050205 100%);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px;pointer-events:auto;overflow-y:auto}
-#startScreen h1{font-size:26px;font-weight:900;letter-spacing:3px;text-align:center;background:linear-gradient(135deg,#8a1818,#d0a040);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-#startScreen .sub{font-size:11px;color:rgba(160,140,100,0.5);margin-top:-6px;letter-spacing:2px}
-.sectionTitle{font-size:11px;font-weight:800;color:rgba(160,140,100,0.6);letter-spacing:2px;margin-top:6px}
-.charGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:min(360px,90vw)}
-.charCard{padding:8px;background:rgba(30,20,15,0.6);border:2px solid rgba(100,80,60,0.3);border-radius:10px;cursor:pointer;text-align:center}
-.charCard.selected{border-color:#d0a040;background:rgba(208,160,64,0.15)}
+.upgradeCard .name{font-size:16px;font-weight:800;color:#ffd166;font-family:'Cinzel',serif;letter-spacing:1px}
+.upgradeCard .desc{font-size:12px;color:rgba(200,180,140,0.8);margin-top:3px;font-weight:600}
+.upgradeCard .lvl{font-size:11px;color:#a060d0;font-weight:800;margin-top:4px;letter-spacing:1px}
+
+/* Başlangıç Ekranı */
+#startScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center,#1a0808 0%,#050205 100%);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;pointer-events:auto;overflow-y:auto}
+#startScreen h1{font-family:'Cinzel',serif;font-size:38px;font-weight:900;letter-spacing:6px;text-align:center;background:linear-gradient(135deg,#ff6060,#ffd166);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(255,96,96,0.4));margin-bottom:4px}
+#startScreen .sub{font-size:13px;color:rgba(160,140,100,0.6);margin-top:-8px;letter-spacing:4px;font-weight:600}
+.sectionTitle{font-family:'Cinzel',serif;font-size:13px;font-weight:800;color:rgba(255,209,102,0.7);letter-spacing:3px;margin-top:10px;margin-bottom:4px;text-shadow:0 0 15px rgba(255,209,102,0.2)}
+
+/* Karakter Kartları */
+.charGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:min(380px,92vw)}
+.charCard{padding:10px 6px;background:rgba(30,20,15,0.7);border:1px solid rgba(100,80,60,0.3);border-radius:12px;cursor:pointer;text-align:center;transition:all 0.25s;backdrop-filter:blur(4px)}
+.charCard:hover{border-color:rgba(255,209,102,0.5);transform:translateY(-2px)}
+.charCard.selected{border-color:#ffd166;background:rgba(255,209,102,0.15);box-shadow:0 0 20px rgba(255,209,102,0.3);transform:translateY(-2px)}
 .charCard:active{transform:scale(0.96)}
-.charCard .emoji{font-size:22px}
-.charCard .name{font-size:11px;font-weight:800;margin-top:1px;color:#c0b090}
-.charCard .wep{font-size:9px;color:rgba(160,140,100,0.6);margin-top:1px}
-.mapGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;width:min(360px,90vw)}
-.mapCard{padding:8px;background:rgba(30,20,15,0.6);border:2px solid rgba(100,80,60,0.3);border-radius:10px;cursor:pointer;text-align:center;position:relative;overflow:hidden}
-.mapCard .mapPreview{width:100%;height:38px;border-radius:5px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;font-size:18px;filter:brightness(0.75)}
-.mapCard.selected{border-color:#d0a040;background:rgba(208,160,64,0.15)}
-.mapCard.locked{opacity:0.5;cursor:not-allowed;background:rgba(0,0,0,0.4)}
-.mapCard .name{font-size:10px;font-weight:800;margin-top:1px;color:#c0b090}
-.mapCard .lock{font-size:9px;color:#a04040;margin-top:2px;line-height:1.2}
-.mapCard .lockIcon{position:absolute;top:4px;right:6px;font-size:14px;z-index:2}
-.goldBox{background:rgba(208,160,64,0.12);border:1px solid rgba(208,160,64,0.4);border-radius:10px;padding:5px 12px;font-size:12px;font-weight:800;color:#d0a040}
-#startScreen button{padding:10px 32px;font-size:15px;font-weight:800;color:#e0c080;background:linear-gradient(135deg,#5a1a1a,#8a3010);border:1px solid rgba(208,160,64,0.4);border-radius:12px;cursor:pointer;box-shadow:0 8px 24px rgba(138,24,24,0.5);pointer-events:auto;margin-top:4px;letter-spacing:1px}
-#startScreen button.sec{background:rgba(30,20,15,0.6);box-shadow:none;font-size:12px;padding:7px 18px;color:#a09070}
-#lifetimeStats{display:flex;gap:12px;font-size:10px;color:rgba(160,140,100,0.6);margin-top:-4px}
-#lifetimeStats span{color:#d0a040;font-weight:800}
-#gameOverScreen h1{font-size:32px;color:#a01818;letter-spacing:3px;margin-bottom:6px}
-#gameOverScreen .stat{font-size:13px;color:rgba(200,180,140,0.7)}
-#gameOverScreen .stat b{color:#d0a040;font-size:18px}
-#gameOverScreen .goldEarned{font-size:15px;color:#d0a040;font-weight:800;margin-top:6px}
-#gameOverScreen button{margin-top:10px;padding:10px 32px;font-size:14px;font-weight:800;color:#e0c080;background:linear-gradient(135deg,#5a1a1a,#8a3010);border:1px solid rgba(208,160,64,0.4);border-radius:12px;cursor:pointer}
-#gameOverScreen button.sec{background:rgba(30,20,15,0.6);font-size:12px;padding:7px 18px;color:#a09070}
-#metaScreen h1{font-size:22px;color:#d0a040;margin-bottom:4px}
-#metaScreen .goldShow{font-size:15px;color:#d0a040;font-weight:800;margin-bottom:6px}
-.metaRow{width:min(340px,90vw);padding:10px 14px;background:rgba(30,20,15,0.6);border:2px solid rgba(100,80,60,0.3);border-radius:10px;display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:5px}
-.metaRow.disabled{opacity:0.4}
-.metaRow .icon{font-size:22px;width:34px;text-align:center}
+.charCard .emoji{font-size:26px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))}
+.charCard .name{font-size:12px;font-weight:800;margin-top:4px;color:#e0c080;font-family:'Cinzel',serif;letter-spacing:0.5px}
+.charCard .wep{font-size:9px;color:rgba(160,140,100,0.7);margin-top:2px;font-weight:600}
+
+/* Harita Kartları */
+.mapGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:min(380px,92vw)}
+.mapCard{padding:8px;background:rgba(30,20,15,0.7);border:1px solid rgba(100,80,60,0.3);border-radius:12px;cursor:pointer;text-align:center;position:relative;overflow:hidden;transition:all 0.25s;backdrop-filter:blur(4px)}
+.mapCard:hover{border-color:rgba(255,209,102,0.5);transform:translateY(-2px)}
+.mapCard .mapPreview{width:100%;height:44px;border-radius:8px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;font-size:22px;filter:brightness(0.8);box-shadow:inset 0 0 20px rgba(0,0,0,0.6)}
+.mapCard.selected{border-color:#ffd166;background:rgba(255,209,102,0.15);box-shadow:0 0 20px rgba(255,209,102,0.3);transform:translateY(-2px)}
+.mapCard.locked{opacity:0.5;cursor:not-allowed;background:rgba(0,0,0,0.5);filter:grayscale(0.8)}
+.mapCard .name{font-size:11px;font-weight:800;margin-top:2px;color:#e0c080;font-family:'Cinzel',serif;letter-spacing:0.5px}
+.mapCard .lock{font-size:9px;color:#ff6060;margin-top:3px;line-height:1.3;font-weight:700}
+.mapCard .lockIcon{position:absolute;top:6px;right:8px;font-size:16px;z-index:2;filter:drop-shadow(0 0 5px rgba(255,96,96,0.8))}
+
+/* Altın Kutusu */
+.goldBox{background:linear-gradient(135deg,rgba(255,209,102,0.15),rgba(255,176,32,0.05));border:1px solid rgba(255,209,102,0.4);border-radius:12px;padding:8px 20px;font-size:15px;font-weight:800;color:#ffd166;box-shadow:0 0 20px rgba(255,209,102,0.15);backdrop-filter:blur(4px);letter-spacing:1px}
+
+/* Başlangıç Butonları */
+#startScreen button{padding:14px 40px;font-family:'Cinzel',serif;font-size:16px;font-weight:900;color:#0a0508;background:linear-gradient(135deg,#ffd166,#ffb020);border:none;border-radius:14px;cursor:pointer;box-shadow:0 0 30px rgba(255,176,32,0.4), 0 8px 24px rgba(0,0,0,0.5);pointer-events:auto;margin-top:8px;letter-spacing:2px;transition:all 0.25s;position:relative;overflow:hidden}
+#startScreen button:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(255,176,32,0.6), 0 12px 30px rgba(0,0,0,0.6)}
+#startScreen button:active{transform:scale(0.97)}
+#startScreen button.sec{background:rgba(30,20,15,0.8);color:#c0b090;box-shadow:none;font-size:13px;padding:10px 24px;font-family:'Rajdhani',sans-serif;font-weight:700;border:1px solid rgba(160,140,100,0.3);letter-spacing:1px}
+#startScreen button.sec:hover{border-color:#ffd166;color:#ffd166;background:rgba(255,209,102,0.1)}
+
+/* Yaşam Boyu İstatistikler */
+#lifetimeStats{display:flex;gap:16px;font-size:12px;color:rgba(160,140,100,0.7);margin-top:0;font-weight:600;background:rgba(0,0,0,0.3);padding:6px 16px;border-radius:20px;border:1px solid rgba(160,140,100,0.1)}
+#lifetimeStats span{color:#ffd166;font-weight:800}
+
+/* Oyun Sonu Ekranı */
+#gameOverScreen h1{font-family:'Cinzel',serif;font-size:42px;color:#ff4040;letter-spacing:6px;margin-bottom:12px;text-shadow:0 0 40px rgba(255,64,64,0.6)}
+#gameOverScreen .stat{font-size:15px;color:rgba(200,180,140,0.8);font-weight:600}
+#gameOverScreen .stat b{color:#ffd166;font-size:20px;font-family:'Cinzel',serif}
+#gameOverScreen .goldEarned{font-size:18px;color:#ffd166;font-weight:800;margin-top:10px;text-shadow:0 0 15px rgba(255,209,102,0.4)}
+#gameOverScreen button{margin-top:14px;padding:14px 40px;font-family:'Cinzel',serif;font-size:16px;font-weight:900;color:#0a0508;background:linear-gradient(135deg,#ffd166,#ffb020);border:none;border-radius:14px;cursor:pointer;box-shadow:0 0 30px rgba(255,176,32,0.4);transition:all 0.25s;letter-spacing:1px}
+#gameOverScreen button:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(255,176,32,0.6)}
+#gameOverScreen button.sec{background:rgba(30,20,15,0.8);color:#c0b090;box-shadow:none;font-size:13px;padding:10px 24px;font-family:'Rajdhani',sans-serif;font-weight:700;border:1px solid rgba(160,140,100,0.3)}
+#gameOverScreen button.sec:hover{border-color:#ffd166;color:#ffd166}
+
+/* Meta Ekranı */
+#metaScreen h1{font-family:'Cinzel',serif;font-size:28px;color:#ffd166;margin-bottom:8px;text-shadow:0 0 30px rgba(255,209,102,0.4);letter-spacing:2px}
+#metaScreen .goldShow{font-size:18px;color:#ffd166;font-weight:800;margin-bottom:12px;text-shadow:0 0 15px rgba(255,209,102,0.4)}
+.metaRow{width:min(360px,92vw);padding:12px 16px;background:rgba(30,20,15,0.7);border:1px solid rgba(100,80,60,0.3);border-radius:12px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:6px;transition:all 0.2s;backdrop-filter:blur(4px)}
+.metaRow:hover{border-color:rgba(255,209,102,0.5);transform:translateX(4px)}
+.metaRow.disabled{opacity:0.35;cursor:not-allowed}
+.metaRow .icon{font-size:24px;width:36px;text-align:center;filter:drop-shadow(0 0 6px rgba(255,209,102,0.3))}
 .metaRow .info{flex:1}
-.metaRow .name{font-size:13px;font-weight:800;color:#c0b090}
-.metaRow .desc{font-size:10px;color:rgba(160,140,100,0.5);margin-top:2px}
-.metaRow .price{font-size:12px;color:#d0a040;font-weight:800}
-#metaScreen button{margin-top:10px;padding:10px 30px;font-size:14px;font-weight:800;color:#e0c080;background:linear-gradient(135deg,#5a1a1a,#8a3010);border:1px solid rgba(208,160,64,0.4);border-radius:12px;cursor:pointer}
-.statsGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:min(340px,90vw);margin-top:8px}
-.statItem{background:rgba(30,20,15,0.6);padding:8px;border-radius:8px;font-size:11px;color:rgba(160,140,100,0.6)}
-.statItem b{display:block;font-size:15px;color:#d0a040;margin-top:2px}
+.metaRow .name{font-size:14px;font-weight:800;color:#e0c080;font-family:'Cinzel',serif;letter-spacing:0.5px}
+.metaRow .desc{font-size:11px;color:rgba(160,140,100,0.6);margin-top:3px;font-weight:600}
+.metaRow .price{font-size:14px;color:#ffd166;font-weight:800;background:rgba(255,209,102,0.1);padding:4px 10px;border-radius:8px;border:1px solid rgba(255,209,102,0.2)}
+#metaScreen button{margin-top:16px;padding:12px 36px;font-family:'Cinzel',serif;font-size:15px;font-weight:900;color:#0a0508;background:linear-gradient(135deg,#ffd166,#ffb020);border:none;border-radius:14px;cursor:pointer;box-shadow:0 0 30px rgba(255,176,32,0.4);transition:all 0.25s;letter-spacing:1px}
+#metaScreen button:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(255,176,32,0.6)}
+
+/* İstatistik Grid */
+.statsGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:min(360px,92vw);margin-top:12px}
+.statItem{background:rgba(30,20,15,0.7);padding:10px;border-radius:10px;font-size:11px;color:rgba(160,140,100,0.7);font-weight:600;border:1px solid rgba(100,80,60,0.2);backdrop-filter:blur(4px)}
+.statItem b{display:block;font-size:18px;color:#ffd166;margin-top:4px;font-family:'Cinzel',serif}
 </style>
 </head>
 <body>
@@ -176,7 +227,6 @@ function resize(){
   canvas.style.width = W+'px';
   canvas.style.height = H+'px';
   ctx.setTransform(DPR,0,0,DPR,0,0);
-  // buildBg ve buildVignette kaldırıldı - resetGame içinde çağrılıyor
 }
 window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', function(){ setTimeout(resize, 200); });
@@ -239,10 +289,10 @@ function buildVignette(){
   var c = document.createElement('canvas');
   c.width = Math.floor(W); c.height = Math.floor(H);
   var vc = c.getContext('2d');
-  var grad = vc.createRadialGradient(W/2, H/2, Math.min(W,H)*0.35, W/2, H/2, Math.max(W,H)*0.85);
+  var grad = vc.createRadialGradient(W/2, H/2, Math.min(W,H)*0.3, W/2, H/2, Math.max(W,H)*0.9);
   grad.addColorStop(0, 'rgba(0,0,0,0)');
-  grad.addColorStop(0.7, 'rgba(0,0,0,0.15)');
-  grad.addColorStop(1, 'rgba(0,0,0,0.55)');
+  grad.addColorStop(0.6, 'rgba(0,0,0,0.1)');
+  grad.addColorStop(1, 'rgba(0,0,0,0.7)');
   vc.fillStyle = grad;
   vc.fillRect(0, 0, W, H);
   vignetteCanvas = c;
@@ -281,27 +331,35 @@ function drawHero(x, y, type, facing, frame){
   ctx.translate(x, y);
   if (facing < 0) ctx.scale(-1, 1);
   var bob = (frame===1||frame===3)?-2:0;
+  // Gölge
   ctx.fillStyle = 'rgba(0,0,0,0.5)';
   ctx.beginPath(); ctx.ellipse(0, 18, 12, 4, 0, 0, Math.PI*2); ctx.fill();
+  // Bacaklar
   ctx.fillStyle = P.head;
   ctx.fillRect(-6, 4+bob, 5, 14);
   ctx.fillRect(1, 4+bob, 5, 14);
+  // Gövde
   ctx.fillStyle = P.body;
   ctx.fillRect(-9, -12+bob, 18, 18);
   ctx.fillStyle = 'rgba(255,255,255,0.15)';
   ctx.fillRect(-9, -12+bob, 18, 3);
+  // Kollar
   ctx.fillStyle = P.body;
   ctx.fillRect(-13, -10+bob, 4, 12);
   ctx.fillRect(9, -10+bob, 4, 12);
+  // Yüz
   ctx.fillStyle = '#8a7a60';
   ctx.fillRect(-7, -24+bob, 14, 12);
+  // Kafa
   ctx.fillStyle = P.head;
   ctx.fillRect(-8, -26+bob, 16, 8);
   ctx.fillStyle = 'rgba(255,255,255,0.15)';
   ctx.fillRect(-8, -26+bob, 16, 2);
+  // Gözler
   ctx.fillStyle = '#000';
   ctx.fillRect(-4, -19+bob, 2, 2);
   ctx.fillRect(2, -19+bob, 2, 2);
+  // Silah
   ctx.fillStyle = P.weapon;
   if (type === 'archer'){
     ctx.strokeStyle = P.weapon; ctx.lineWidth = 2;
@@ -310,6 +368,11 @@ function drawHero(x, y, type, facing, frame){
     ctx.fillRect(12, -20+bob, 3, 22);
     ctx.fillStyle = type === 'bloodmage' ? '#d04040' : '#a06ac0';
     ctx.beginPath(); ctx.arc(13.5, -22+bob, 5, 0, Math.PI*2); ctx.fill();
+    // Glow
+    ctx.shadowColor = type === 'bloodmage' ? '#d04040' : '#a06ac0';
+    ctx.shadowBlur = 10;
+    ctx.beginPath(); ctx.arc(13.5, -22+bob, 3, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
   } else if (type === 'warrior' || type === 'knight'){
     ctx.fillRect(12, -18+bob, 3, 18);
     ctx.fillStyle = '#3a2a1a';
@@ -327,19 +390,30 @@ function drawEnemy(e, camX, camY){
   var bob = (e.frame % 2 === 0) ? 0 : -2;
   ctx.save();
   ctx.translate(x, y);
+  // Boss/Elite aura
   if (e.isBoss){
-    ctx.fillStyle = 'rgba(200,50,50,0.25)';
-    ctx.beginPath(); ctx.arc(0, 0, r+18, 0, Math.PI*2); ctx.fill();
+    var auraGrad = ctx.createRadialGradient(0,0,r*0.5,0,0,r+25);
+    auraGrad.addColorStop(0,'rgba(255,50,50,0.4)');
+    auraGrad.addColorStop(1,'rgba(255,50,50,0)');
+    ctx.fillStyle = auraGrad;
+    ctx.beginPath(); ctx.arc(0, 0, r+25, 0, Math.PI*2); ctx.fill();
   } else if (e.isElite){
-    ctx.fillStyle = 'rgba(200,120,40,0.2)';
-    ctx.beginPath(); ctx.arc(0, 0, r+10, 0, Math.PI*2); ctx.fill();
+    var auraGrad2 = ctx.createRadialGradient(0,0,r*0.5,0,0,r+15);
+    auraGrad2.addColorStop(0,'rgba(255,160,50,0.35)');
+    auraGrad2.addColorStop(1,'rgba(255,160,50,0)');
+    ctx.fillStyle = auraGrad2;
+    ctx.beginPath(); ctx.arc(0, 0, r+15, 0, Math.PI*2); ctx.fill();
   }
+  // Gölge
   ctx.fillStyle = 'rgba(0,0,0,0.5)';
   ctx.beginPath(); ctx.ellipse(0, r-2, r*0.9, r*0.3, 0, 0, Math.PI*2); ctx.fill();
+  // Gövde
   ctx.fillStyle = P.body;
   ctx.beginPath(); ctx.arc(0, 0+bob, r, 0, Math.PI*2); ctx.fill();
+  // Kafa
   ctx.fillStyle = P.head;
   ctx.beginPath(); ctx.arc(0, -r*0.3+bob, r*0.7, 0, Math.PI*2); ctx.fill();
+  // Gözler
   ctx.fillStyle = P.eye || '#000';
   ctx.beginPath();
   ctx.arc(-r*0.3, -r*0.2+bob, r*0.18, 0, Math.PI*2);
@@ -347,11 +421,15 @@ function drawEnemy(e, camX, camY){
   ctx.fill();
   if (P.eyeGlow){
     ctx.fillStyle = P.eyeGlow;
+    ctx.shadowColor = P.eyeGlow;
+    ctx.shadowBlur = 8;
     ctx.beginPath();
     ctx.arc(-r*0.3, -r*0.2+bob, r*0.08, 0, Math.PI*2);
     ctx.arc(r*0.3, -r*0.2+bob, r*0.08, 0, Math.PI*2);
     ctx.fill();
+    ctx.shadowBlur = 0;
   }
+  // Özel çizimler
   if (e.type === 'skeleton' || e.type === 'iceSkel' || e.type === 'skullDemon'){
     ctx.strokeStyle = P.extra; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(-r*0.8, 0+bob); ctx.lineTo(r*0.8, 0+bob); ctx.stroke();
@@ -390,30 +468,37 @@ function drawEnemy(e, camX, camY){
     ctx.moveTo(r*0.7, -r*0.5+bob); ctx.lineTo(r*0.5, -r*1.2+bob); ctx.lineTo(r*0.2, -r*0.7+bob);
     ctx.closePath(); ctx.fill();
   }
+  // Taç / Elite işareti
   if (e.isBoss){
     ctx.fillStyle = '#ffd166';
+    ctx.shadowColor = '#ffd166'; ctx.shadowBlur = 10;
     ctx.beginPath();
     ctx.moveTo(-r*0.8, -r*1.1); ctx.lineTo(-r*0.5, -r*1.5); ctx.lineTo(-r*0.2, -r*1.1);
     ctx.lineTo(0, -r*1.5); ctx.lineTo(r*0.2, -r*1.1); ctx.lineTo(r*0.5, -r*1.5);
     ctx.lineTo(r*0.8, -r*1.1); ctx.closePath();
     ctx.fill();
+    ctx.shadowBlur = 0;
   } else if (e.isElite){
     ctx.fillStyle = '#ff9f68';
     ctx.beginPath();
     ctx.moveTo(-r*0.5, -r*0.9); ctx.lineTo(0, -r*1.3); ctx.lineTo(r*0.5, -r*0.9);
     ctx.closePath(); ctx.fill();
   }
+  // Hasar efekti
   if (e.hitFlash > 0){
     ctx.fillStyle = 'rgba(255,220,220,' + Math.min(0.8, e.hitFlash*4) + ')';
     ctx.beginPath(); ctx.arc(0, 0+bob, r, 0, Math.PI*2); ctx.fill();
   }
   ctx.restore();
+  // Can barı
   if (e.isBoss || e.isElite || e.hp < e.maxHp){
     var bw = r*2.5, bh = 3, by = y - r - 12;
     ctx.fillStyle = 'rgba(0,0,0,0.75)';
     ctx.fillRect(x-bw/2, by, bw, bh);
-    ctx.fillStyle = e.isBoss ? '#a01818' : e.isElite ? '#a06030' : '#8a2020';
+    ctx.fillStyle = e.isBoss ? '#ff4040' : e.isElite ? '#ff9f68' : '#c03030';
+    if (e.isBoss){ ctx.shadowColor = '#ff4040'; ctx.shadowBlur = 6; }
     ctx.fillRect(x-bw/2, by, bw*(e.hp/e.maxHp), bh);
+    ctx.shadowBlur = 0;
   }
 }
 
@@ -499,7 +584,6 @@ var wave = 1, currentWaveTypes = [];
 var currentMap = MAPS[0];
 var bossMechanicTimer = 0;
 
-// CHARACTERS dizisi buraya taşındı
 var CHARACTERS = [
   { id:'warrior', spriteType:'warrior', name:'Savaşçı', emoji:'⚔️', weapon:'knife', desc:'Bıçak - Tank', hp:140, speed:200, damageMult:0.95 },
   { id:'rogue', spriteType:'rogue', name:'Suikastçı', emoji:'🗡️', weapon:'knife', desc:'Hızlı', hp:75, speed:280, damageMult:0.85 },
@@ -625,7 +709,7 @@ function updateWeapons(dt){
         var baseAng = Math.atan2(target.y-player.y, target.x-player.x);
         for (var i=0;i<count;i++){
           var ang = baseAng + (i-(count-1)/2)*spread;
-          bullets.push({ x:player.x, y:player.y, vx:Math.cos(ang)*600, vy:Math.sin(ang)*600, dmg:baseDmg, radius:6, life:0.5, color:'#c0c0c0', type:'knife', pierce:w.evolved?2:0, hitSet:{} });
+          bullets.push({ x:player.x, y:player.y, vx:Math.cos(ang)*600, vy:Math.sin(ang)*600, dmg:baseDmg, radius:6, life:0.5, color:'#e0e0ff', type:'knife', pierce:w.evolved?2:0, hitSet:{} });
         }
       }
     }
@@ -639,7 +723,7 @@ function updateWeapons(dt){
       if (t2){
         w.timer = Math.max(300, (w.evolved ? 500 : 900) * cdMult);
         var a2 = Math.atan2(t2.y-player.y, t2.x-player.x);
-        bullets.push({ x:player.x, y:player.y, vx:Math.cos(a2)*700, vy:Math.sin(a2)*700, dmg:(w.evolved ? 55 : 25) * (1+(w.level-1)*0.3) * dmgMult, radius:w.evolved?16:8, life:w.evolved?1.8:1.2, color:'#a08040', type:'spear', pierce:999, explodeRadius:w.evolved ? 90*areaMult : 0, hitSet:{} });
+        bullets.push({ x:player.x, y:player.y, vx:Math.cos(a2)*700, vy:Math.sin(a2)*700, dmg:(w.evolved ? 55 : 25) * (1+(w.level-1)*0.3) * dmgMult, radius:w.evolved?16:8, life:w.evolved?1.8:1.2, color:'#ffd166', type:'spear', pierce:999, explodeRadius:w.evolved ? 90*areaMult : 0, hitSet:{} });
       }
     }
   }
@@ -652,7 +736,7 @@ function updateWeapons(dt){
       if (t3){
         w.timer = Math.max(400, (w.evolved ? 900 : 1400) * cdMult);
         var a3 = Math.atan2(t3.y-player.y, t3.x-player.x);
-        bullets.push({ x:player.x, y:player.y, vx:Math.cos(a3)*380, vy:Math.sin(a3)*380, dmg:(w.evolved ? 50 : 30) * (1+(w.level-1)*0.3) * dmgMult, radius:w.evolved?18:12, life:1.6, color:'#d06020', type:'fireball', explodeRadius:(w.evolved ? 110 : 60) * areaMult, hitSet:{} });
+        bullets.push({ x:player.x, y:player.y, vx:Math.cos(a3)*380, vy:Math.sin(a3)*380, dmg:(w.evolved ? 50 : 30) * (1+(w.level-1)*0.3) * dmgMult, radius:w.evolved?18:12, life:1.6, color:'#ff6020', type:'fireball', explodeRadius:(w.evolved ? 110 : 60) * areaMult, hitSet:{} });
       }
     }
   }
@@ -684,7 +768,7 @@ function updateWeapons(dt){
       var bCount = w.evolved ? 4 : (1 + w.level);
       for (var i=0;i<bCount;i++){
         var bAng = a4 + i * (Math.PI*2/bCount);
-        bullets.push({ x:player.x, y:player.y, vx:Math.cos(bAng)*350, vy:Math.sin(bAng)*350, dmg:(w.evolved ? 40 : 22) * (1+(w.level-1)*0.3) * dmgMult, radius:w.evolved?14:10, life:2.4, color:'#a08040', type:'boomerang', pierce:999, hitSet:{}, returnHitSet:{}, boomerangPhase:0 });
+        bullets.push({ x:player.x, y:player.y, vx:Math.cos(bAng)*350, vy:Math.sin(bAng)*350, dmg:(w.evolved ? 40 : 22) * (1+(w.level-1)*0.3) * dmgMult, radius:w.evolved?14:10, life:2.4, color:'#ffd166', type:'boomerang', pierce:999, hitSet:{}, returnHitSet:{}, boomerangPhase:0 });
       }
     }
   }
@@ -710,7 +794,7 @@ function updateWeapons(dt){
       var t5 = findNearestEnemy(player.x, player.y, 200);
       if (t5){
         w.timer = Math.max(700, (w.evolved ? 1100 : 1800) * cdMult);
-        bullets.push({ x:t5.x, y:t5.y, vx:0, vy:0, dmg:(w.evolved ? 80 : 50) * (1+(w.level-1)*0.4) * dmgMult, radius:w.evolved?80:50, life:0.4, color:'#a08040', type:'hammer' });
+        bullets.push({ x:t5.x, y:t5.y, vx:0, vy:0, dmg:(w.evolved ? 80 : 50) * (1+(w.level-1)*0.4) * dmgMult, radius:w.evolved?80:50, life:0.4, color:'#ffd166', type:'hammer' });
       }
     }
   }
@@ -883,7 +967,7 @@ function applyDamage(enemy, dmg){
   enemy.hp -= dmg;
   totalDamage += dmg;
   enemy.hitFlash = 0.12;
-  damageNumbers.push({ x:enemy.x+Math.random()*20-10, y:enemy.y-enemy.radius, text:(crit?'💥':'')+Math.round(dmg), color: crit ? '#ff4040' : '#d0a040', life:0.7, maxLife:0.7, vy:-60, big: crit });
+  damageNumbers.push({ x:enemy.x+Math.random()*20-10, y:enemy.y-enemy.radius, text:(crit?'💥':'')+Math.round(dmg), color: crit ? '#ff6060' : '#ffd166', life:0.7, maxLife:0.7, vy:-60, big: crit });
   if (crit) Snd.crit(); else if (Math.random() < 0.3) Snd.hit();
   if (enemy.hp <= 0) killEnemy(enemy);
 }
@@ -924,7 +1008,7 @@ function killEnemy(enemy){
   for (var p=0;p<8;p++){
     var ang = Math.random()*Math.PI*2;
     var spd = 80+Math.random()*140;
-    particles.push({ type:'spark', x:enemy.x, y:enemy.y, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, life:0.5, maxLife:0.5, color:'#8a2020', radius:Math.random()*4+2 });
+    particles.push({ type:'spark', x:enemy.x, y:enemy.y, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, life:0.5, maxLife:0.5, color:'#c03030', radius:Math.random()*4+2 });
   }
 }
 
@@ -1054,7 +1138,7 @@ function updateBullets(dt){
           for (var p=0;p<14;p++){
             var ang = Math.random()*Math.PI*2;
             var spd = 60+Math.random()*160;
-            particles.push({ type:'spark', x:b.x, y:b.y, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, life:0.4, maxLife:0.4, color:'#d06020', radius:Math.random()*5+2 });
+            particles.push({ type:'spark', x:b.x, y:b.y, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, life:0.4, maxLife:0.4, color:'#ff6020', radius:Math.random()*5+2 });
           }
           hit = true; break;
         }
@@ -1142,7 +1226,7 @@ function openChest(chest){
       showToast('👟 HIZ ARTTI!', 'Kalıcı +60 hareket hızı');
     } else {
       player.damageMult += 0.15;
-      spawnFloater(player.x, player.y-40, '💪 HASAR +15%', '#d04040', true);
+      spawnFloater(player.x, player.y-40, '💪 HASAR +15%', '#ff6060', true);
       showToast('💪 GÜÇ ARTTI!', 'Kalıcı +15% hasar');
     }
     Snd.evolve(); shake = 8;
@@ -1151,14 +1235,14 @@ function openChest(chest){
     goldCollected += gold;
     player.hp = player.maxHp;
     player.xp += 15;
-    spawnFloater(player.x, player.y-40, '💎 EFSANE!', '#d0a040', true);
+    spawnFloater(player.x, player.y-40, '💎 EFSANE!', '#ffd166', true);
     showToast('💎 EFSANE SANDIK!', '+' + gold + ' altın, tam can, +15 XP');
     Snd.evolve(); shake = 20;
     if (player.xp >= player.xpNext) levelUp();
   } else {
     var goldAmt = Math.round((25 + Math.floor(Math.random()*35)) * currentMap.goldMult);
     goldCollected += goldAmt;
-    spawnFloater(player.x, player.y-40, '+' + goldAmt + ' 💰', '#d0a040', false);
+    spawnFloater(player.x, player.y-40, '+' + goldAmt + ' 💰', '#ffd166', false);
     Snd.gold();
   }
 }
@@ -1388,7 +1472,7 @@ function render(){
     var g = gems[i];
     var sx = g.x - camX, sy = g.y - camY;
     var r = g.value >= 5 ? 9 : g.value >= 3 ? 8 : g.value >= 2 ? 6 : 5;
-    var col = g.value >= 5 ? '#a860d0' : '#5fb390';
+    var col = g.value >= 5 ? '#c060ff' : '#5fb390';
     var grad2 = ctx.createRadialGradient(sx, sy, 0, sx, sy, r*2);
     grad2.addColorStop(0, col); grad2.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = grad2;
@@ -1434,43 +1518,51 @@ function render(){
     if (b.type === 'knife'){
       var ang = Math.atan2(b.vy, b.vx);
       ctx.save(); ctx.translate(sx, sy); ctx.rotate(ang);
+      ctx.shadowColor = '#e0e0ff'; ctx.shadowBlur = 8;
       ctx.fillStyle = b.color; ctx.fillRect(-12, -3, 24, 6);
+      ctx.shadowBlur = 0;
       ctx.fillStyle = '#5a4a30'; ctx.fillRect(-15, -2, 5, 4);
       ctx.restore();
     } else if (b.type === 'spear' || b.type === 'iceSpear'){
       var ang = Math.atan2(b.vy, b.vx);
       ctx.save(); ctx.translate(sx, sy); ctx.rotate(ang);
+      ctx.shadowColor = b.color; ctx.shadowBlur = 10;
       ctx.fillStyle = b.color;
       ctx.beginPath();
       ctx.moveTo(-20, 0); ctx.lineTo(12, -6); ctx.lineTo(20, 0); ctx.lineTo(12, 6);
       ctx.closePath(); ctx.fill();
+      ctx.shadowBlur = 0;
       ctx.fillStyle = '#4a2a10'; ctx.fillRect(-26, -2, 10, 4);
       ctx.restore();
     } else if (b.type === 'fireball'){
       var grad3 = ctx.createRadialGradient(sx, sy, 0, sx, sy, b.radius*2);
-      grad3.addColorStop(0, b.isEnemyBullet ? '#ff8040' : '#d0a040');
-      grad3.addColorStop(0.5, b.isEnemyBullet ? '#ff4010' : '#d06020');
-      grad3.addColorStop(1, 'rgba(208,96,32,0)');
+      grad3.addColorStop(0, b.isEnemyBullet ? '#ff8040' : '#ffd166');
+      grad3.addColorStop(0.5, b.isEnemyBullet ? '#ff4010' : '#ff6020');
+      grad3.addColorStop(1, 'rgba(255,96,32,0)');
       ctx.fillStyle = grad3;
       ctx.beginPath(); ctx.arc(sx, sy, b.radius*2, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = '#f0d080';
+      ctx.fillStyle = '#fff0c0';
       ctx.beginPath(); ctx.arc(sx, sy, b.radius*0.6, 0, Math.PI*2); ctx.fill();
     } else if (b.type === 'boomerang'){
       var ang = now * 0.008;
       ctx.save(); ctx.translate(sx, sy); ctx.rotate(ang);
+      ctx.shadowColor = b.color; ctx.shadowBlur = 10;
       ctx.strokeStyle = b.color; ctx.lineWidth = 4; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.arc(0, 0, 8, 0.3, Math.PI - 0.3); ctx.stroke();
       ctx.beginPath(); ctx.arc(0, 0, 8, Math.PI + 0.3, Math.PI*2 - 0.3); ctx.stroke();
+      ctx.shadowBlur = 0;
       ctx.restore();
     } else if (b.type === 'hammer'){
       ctx.save();
       ctx.translate(sx, sy);
       var scale = b.life / 0.4;
       ctx.scale(scale, scale);
-      ctx.fillStyle = 'rgba(200,180,100,' + (0.5 * scale) + ')';
+      ctx.fillStyle = 'rgba(255,209,102,' + (0.4 * scale) + ')';
       ctx.beginPath(); ctx.arc(0, 0, b.radius, 0, Math.PI*2); ctx.fill();
-      ctx.strokeStyle = '#a08040'; ctx.lineWidth = 3;
+      ctx.shadowColor = '#ffd166'; ctx.shadowBlur = 15;
+      ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.arc(0, 0, b.radius, 0, Math.PI*2); ctx.stroke();
+      ctx.shadowBlur = 0;
       ctx.restore();
     }
   }
@@ -1486,8 +1578,8 @@ function render(){
     } else if (p.type === 'lightning'){
       var x1 = p.x1-camX, y1 = p.y1-camY, x2 = p.x2-camX, y2 = p.y2-camY;
       ctx.globalAlpha = p.life/p.maxLife;
-      ctx.strokeStyle = '#e0d080'; ctx.lineWidth = 3;
-      ctx.shadowColor = '#d0a040'; ctx.shadowBlur = 12;
+      ctx.strokeStyle = '#ffe080'; ctx.lineWidth = 3;
+      ctx.shadowColor = '#ffd166'; ctx.shadowBlur = 20;
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       for (var s=1;s<5;s++){
@@ -1503,7 +1595,7 @@ function render(){
 
   var px2 = player.x - camX, py2 = player.y - camY;
   if (comboActive > 0){
-    ctx.strokeStyle = 'rgba(200,120,40,'+(0.5+Math.sin(now*0.01)*0.3)+')';
+    ctx.strokeStyle = 'rgba(255,176,32,'+(0.5+Math.sin(now*0.01)*0.3)+')';
     ctx.lineWidth = 3;
     ctx.beginPath(); ctx.arc(px2, py2, player.radius+12, 0, Math.PI*2); ctx.stroke();
   }
@@ -1522,8 +1614,10 @@ function render(){
     ctx.strokeStyle = 'rgba(200,180,140,0.25)';
     ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(W/2, H/2, 60, 0, Math.PI*2); ctx.stroke();
-    ctx.fillStyle = 'rgba(200,180,140,0.4)';
+    ctx.fillStyle = 'rgba(255,209,102,0.5)';
+    ctx.shadowColor = '#ffd166'; ctx.shadowBlur = 15;
     ctx.beginPath(); ctx.arc(W/2+input.dx*50, H/2+input.dy*50, 18, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
   }
 
   if (vignetteCanvas){ ctx.drawImage(vignetteCanvas, 0, 0, W, H); }
@@ -1534,11 +1628,11 @@ function render(){
     var sx = d.x - camX, sy = d.y - camY;
     var alpha = Math.min(1, d.life/d.maxLife*2);
     ctx.globalAlpha = alpha;
-    var fs = d.isFloater ? (d.big ? 24 : 16) : (d.big ? 22 : 16);
-    ctx.font = 'bold '+fs+'px -apple-system, sans-serif';
-    ctx.strokeStyle = '#000'; ctx.lineWidth = d.big ? 4 : 3;
+    var fs = d.isFloater ? (d.big ? 26 : 18) : (d.big ? 24 : 18);
+    ctx.font = 'bold '+fs+'px Rajdhani, sans-serif';
+    ctx.strokeStyle = '#000'; ctx.lineWidth = d.big ? 5 : 4;
     ctx.strokeText(d.text, sx, sy);
-    ctx.fillStyle = d.color || '#d0a040';
+    ctx.fillStyle = d.color || '#ffd166';
     ctx.fillText(d.text, sx, sy);
   }
   ctx.globalAlpha = 1;
@@ -1555,7 +1649,7 @@ function updateUI(){
   document.getElementById('gold').textContent = goldCollected;
   var wl = document.getElementById('weaponList');
   wl.innerHTML = '';
-  var names = { knife:'Bıçak', spear:'Mızrak', fireball:' playerAteş', lightning:'Şimşek', boomerang:'Bumerang', poison:'Zehir', hammer:'Çekiç', iceSpear:'Buz Mızrağı', flameSword:'Alev Kılıcı' };
+  var names = { knife:'Bıçak', spear:'Mızrak', fireball:'Ateş', lightning:'Şimşek', boomerang:'Bumerang', poison:'Zehir', hammer:'Çekiç', iceSpear:'Buz Mızrağı', flameSword:'Alev Kılıcı' };
   for (var key in weapons){
     var w = weapons[key];
     if (!w || w.level <= 0) continue;
@@ -1628,7 +1722,7 @@ function resetGame(){
   player.speed = ch.speed + metaSpeed;
   player.level = 1; player.xp = 0; player.xpNext = 5;
   player.invulnUntil = 0; player.hitFlash = 0; player.facing = 1;
- .damageMult = ch.damageMult * metaDmg;
+  player.damageMult = ch.damageMult * metaDmg;
   player.cooldownMult = metaCd;
   player.critChance = metaCrit;
   player.critMult = 2.0;
@@ -1768,7 +1862,7 @@ function renderMeta(){
     var canAfford = meta.gold >= price;
     var row = document.createElement('div');
     row.className = 'metaRow' + (canAfford ? '' : ' disabled');
-    row.innerHTML = '<div class="icon">'+u.icon+'</div>'+'<div class="info">'+'<div class="name">'+u.name+' <span style="color:#d0a040">Lv'+lvl+'</span></div>'+'<div class="desc">'+u.desc+'</div>'+'</div>'+'<div class="price">💰 '+price+'</div>';
+    row.innerHTML = '<div class="icon">'+u.icon+'</div>'+'<div class="info">'+'<div class="name">'+u.name+' <span style="color:#ffd166">Lv'+lvl+'</span></div>'+'<div class="desc">'+u.desc+'</div>'+'</div>'+'<div class="price">💰 '+price+'</div>';
     (function(up, pr){
       row.addEventListener('click', function(){
         if (meta.gold >= pr){
@@ -1822,7 +1916,6 @@ canvas.addEventListener('pointerup', onUp, {passive:false});
 canvas.addEventListener('pointercancel', onUp, {passive:false});
 canvas.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
-// Başlatma sırası düzeltildi:
 renderCharGrid();
 renderMapGrid();
 updateStartScreenStats();
