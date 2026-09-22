@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0a0508">
 <title>Nightfall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
-
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;font-family:'Rajdhani',-apple-system,BlinkMacSystemFont,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0508;color:#fff}
 canvas{display:block;touch-action:none;width:100%;height:100%}
@@ -331,35 +332,27 @@ function drawHero(x, y, type, facing, frame){
   ctx.translate(x, y);
   if (facing < 0) ctx.scale(-1, 1);
   var bob = (frame===1||frame===3)?-2:0;
-  // Gölge
   ctx.fillStyle = 'rgba(0,0,0,0.5)';
   ctx.beginPath(); ctx.ellipse(0, 18, 12, 4, 0, 0, Math.PI*2); ctx.fill();
-  // Bacaklar
   ctx.fillStyle = P.head;
   ctx.fillRect(-6, 4+bob, 5, 14);
   ctx.fillRect(1, 4+bob, 5, 14);
-  // Gövde
   ctx.fillStyle = P.body;
   ctx.fillRect(-9, -12+bob, 18, 18);
   ctx.fillStyle = 'rgba(255,255,255,0.15)';
   ctx.fillRect(-9, -12+bob, 18, 3);
-  // Kollar
   ctx.fillStyle = P.body;
   ctx.fillRect(-13, -10+bob, 4, 12);
   ctx.fillRect(9, -10+bob, 4, 12);
-  // Yüz
   ctx.fillStyle = '#8a7a60';
   ctx.fillRect(-7, -24+bob, 14, 12);
-  // Kafa
   ctx.fillStyle = P.head;
   ctx.fillRect(-8, -26+bob, 16, 8);
   ctx.fillStyle = 'rgba(255,255,255,0.15)';
   ctx.fillRect(-8, -26+bob, 16, 2);
-  // Gözler
   ctx.fillStyle = '#000';
   ctx.fillRect(-4, -19+bob, 2, 2);
   ctx.fillRect(2, -19+bob, 2, 2);
-  // Silah
   ctx.fillStyle = P.weapon;
   if (type === 'archer'){
     ctx.strokeStyle = P.weapon; ctx.lineWidth = 2;
@@ -368,7 +361,6 @@ function drawHero(x, y, type, facing, frame){
     ctx.fillRect(12, -20+bob, 3, 22);
     ctx.fillStyle = type === 'bloodmage' ? '#d04040' : '#a06ac0';
     ctx.beginPath(); ctx.arc(13.5, -22+bob, 5, 0, Math.PI*2); ctx.fill();
-    // Glow
     ctx.shadowColor = type === 'bloodmage' ? '#d04040' : '#a06ac0';
     ctx.shadowBlur = 10;
     ctx.beginPath(); ctx.arc(13.5, -22+bob, 3, 0, Math.PI*2); ctx.fill();
@@ -390,7 +382,6 @@ function drawEnemy(e, camX, camY){
   var bob = (e.frame % 2 === 0) ? 0 : -2;
   ctx.save();
   ctx.translate(x, y);
-  // Boss/Elite aura
   if (e.isBoss){
     var auraGrad = ctx.createRadialGradient(0,0,r*0.5,0,0,r+25);
     auraGrad.addColorStop(0,'rgba(255,50,50,0.4)');
@@ -404,16 +395,12 @@ function drawEnemy(e, camX, camY){
     ctx.fillStyle = auraGrad2;
     ctx.beginPath(); ctx.arc(0, 0, r+15, 0, Math.PI*2); ctx.fill();
   }
-  // Gölge
   ctx.fillStyle = 'rgba(0,0,0,0.5)';
   ctx.beginPath(); ctx.ellipse(0, r-2, r*0.9, r*0.3, 0, 0, Math.PI*2); ctx.fill();
-  // Gövde
   ctx.fillStyle = P.body;
   ctx.beginPath(); ctx.arc(0, 0+bob, r, 0, Math.PI*2); ctx.fill();
-  // Kafa
   ctx.fillStyle = P.head;
   ctx.beginPath(); ctx.arc(0, -r*0.3+bob, r*0.7, 0, Math.PI*2); ctx.fill();
-  // Gözler
   ctx.fillStyle = P.eye || '#000';
   ctx.beginPath();
   ctx.arc(-r*0.3, -r*0.2+bob, r*0.18, 0, Math.PI*2);
@@ -429,7 +416,6 @@ function drawEnemy(e, camX, camY){
     ctx.fill();
     ctx.shadowBlur = 0;
   }
-  // Özel çizimler
   if (e.type === 'skeleton' || e.type === 'iceSkel' || e.type === 'skullDemon'){
     ctx.strokeStyle = P.extra; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(-r*0.8, 0+bob); ctx.lineTo(r*0.8, 0+bob); ctx.stroke();
@@ -468,7 +454,6 @@ function drawEnemy(e, camX, camY){
     ctx.moveTo(r*0.7, -r*0.5+bob); ctx.lineTo(r*0.5, -r*1.2+bob); ctx.lineTo(r*0.2, -r*0.7+bob);
     ctx.closePath(); ctx.fill();
   }
-  // Taç / Elite işareti
   if (e.isBoss){
     ctx.fillStyle = '#ffd166';
     ctx.shadowColor = '#ffd166'; ctx.shadowBlur = 10;
@@ -484,13 +469,11 @@ function drawEnemy(e, camX, camY){
     ctx.moveTo(-r*0.5, -r*0.9); ctx.lineTo(0, -r*1.3); ctx.lineTo(r*0.5, -r*0.9);
     ctx.closePath(); ctx.fill();
   }
-  // Hasar efekti
   if (e.hitFlash > 0){
     ctx.fillStyle = 'rgba(255,220,220,' + Math.min(0.8, e.hitFlash*4) + ')';
     ctx.beginPath(); ctx.arc(0, 0+bob, r, 0, Math.PI*2); ctx.fill();
   }
   ctx.restore();
-  // Can barı
   if (e.isBoss || e.isElite || e.hp < e.maxHp){
     var bw = r*2.5, bh = 3, by = y - r - 12;
     ctx.fillStyle = 'rgba(0,0,0,0.75)';
@@ -1916,6 +1899,7 @@ canvas.addEventListener('pointerup', onUp, {passive:false});
 canvas.addEventListener('pointercancel', onUp, {passive:false});
 canvas.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
+// Başlatma sırası düzeltildi:
 renderCharGrid();
 renderMapGrid();
 updateStartScreenStats();
