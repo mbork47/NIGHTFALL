@@ -176,7 +176,7 @@ function resize(){
   canvas.style.width = W+'px';
   canvas.style.height = H+'px';
   ctx.setTransform(DPR,0,0,DPR,0,0);
-  buildBg(); buildVignette();
+  // buildBg ve buildVignette kaldırıldı - resetGame içinde çağrılıyor
 }
 window.addEventListener('resize', resize);
 window.addEventListener('orientationchange', function(){ setTimeout(resize, 200); });
@@ -498,6 +498,17 @@ var now = 0, playerAnimFrame = 0, playerAnimTimer = 0;
 var wave = 1, currentWaveTypes = [];
 var currentMap = MAPS[0];
 var bossMechanicTimer = 0;
+
+// CHARACTERS dizisi buraya taşındı
+var CHARACTERS = [
+  { id:'warrior', spriteType:'warrior', name:'Savaşçı', emoji:'⚔️', weapon:'knife', desc:'Bıçak - Tank', hp:140, speed:200, damageMult:0.95 },
+  { id:'rogue', spriteType:'rogue', name:'Suikastçı', emoji:'🗡️', weapon:'knife', desc:'Hızlı', hp:75, speed:280, damageMult:0.85 },
+  { id:'mage', spriteType:'mage', name:'Büyücü', emoji:'🔮', weapon:'fireball', desc:'Ateş', hp:70, speed:195, damageMult:1.25 },
+  { id:'archer', spriteType:'archer', name:'Okçu', emoji:'🏹', weapon:'spear', desc:'Uzaktan', hp:95, speed:235, damageMult:1.05 },
+  { id:'bloodmage', spriteType:'bloodmage', name:'Kan Büyücüsü', emoji:'🩸', weapon:'lightning', desc:'Şimşek - Regen', hp:85, speed:215, damageMult:1.15, regenBonus:1 },
+  { id:'knight', spriteType:'knight', name:'Şövalye', emoji:'🛡️', weapon:'knife', desc:'Dayanıklı', hp:180, speed:180, damageMult:1.0 }
+];
+var selectedChar = 0;
 
 var player = { x:0, y:0, hp:100, maxHp:100, speed:220, radius:14, xp:0, xpNext:5, level:1, invulnUntil:0, facing:1, hitFlash:0, damageMult:1.0, cooldownMult:1.0, critChance:0, critMult:2.0, regenRate:0, regenTimer:0, spriteType:'warrior' };
 var cam = { x:0, y:0 };
@@ -1544,7 +1555,7 @@ function updateUI(){
   document.getElementById('gold').textContent = goldCollected;
   var wl = document.getElementById('weaponList');
   wl.innerHTML = '';
-  var names = { knife:'Bıçak', spear:'Mızrak', fireball:'Ateş', lightning:'Şimşek', boomerang:'Bumerang', poison:'Zehir', hammer:'Çekiç', iceSpear:'Buz Mızrağı', flameSword:'Alev Kılıcı' };
+  var names = { knife:'Bıçak', spear:'Mızrak', fireball:' playerAteş', lightning:'Şimşek', boomerang:'Bumerang', poison:'Zehir', hammer:'Çekiç', iceSpear:'Buz Mızrağı', flameSword:'Alev Kılıcı' };
   for (var key in weapons){
     var w = weapons[key];
     if (!w || w.level <= 0) continue;
@@ -1617,7 +1628,7 @@ function resetGame(){
   player.speed = ch.speed + metaSpeed;
   player.level = 1; player.xp = 0; player.xpNext = 5;
   player.invulnUntil = 0; player.hitFlash = 0; player.facing = 1;
-  player.damageMult = ch.damageMult * metaDmg;
+ .damageMult = ch.damageMult * metaDmg;
   player.cooldownMult = metaCd;
   player.critChance = metaCrit;
   player.critMult = 2.0;
@@ -1686,16 +1697,6 @@ function updateStartScreenStats(){
   document.getElementById('lifetimeKills').textContent = meta.lifetimeKills;
   document.getElementById('lifetimeBosses').textContent = meta.lifetimeBosses;
 }
-
-var CHARACTERS = [
-  { id:'warrior', spriteType:'warrior', name:'Savaşçı', emoji:'⚔️', weapon:'knife', desc:'Bıçak - Tank', hp:140, speed:200, damageMult:0.95 },
-  { id:'rogue', spriteType:'rogue', name:'Suikastçı', emoji:'🗡️', weapon:'knife', desc:'Hızlı', hp:75, speed:280, damageMult:0.85 },
-  { id:'mage', spriteType:'mage', name:'Büyücü', emoji:'🔮', weapon:'fireball', desc:'Ateş', hp:70, speed:195, damageMult:1.25 },
-  { id:'archer', spriteType:'archer', name:'Okçu', emoji:'🏹', weapon:'spear', desc:'Uzaktan', hp:95, speed:235, damageMult:1.05 },
-  { id:'bloodmage', spriteType:'bloodmage', name:'Kan Büyücüsü', emoji:'🩸', weapon:'lightning', desc:'Şimşek - Regen', hp:85, speed:215, damageMult:1.15, regenBonus:1 },
-  { id:'knight', spriteType:'knight', name:'Şövalye', emoji:'🛡️', weapon:'knife', desc:'Dayanıklı', hp:180, speed:180, damageMult:1.0 }
-];
-var selectedChar = 0;
 
 function renderCharGrid(){
   var grid = document.getElementById('charGrid');
@@ -1821,10 +1822,11 @@ canvas.addEventListener('pointerup', onUp, {passive:false});
 canvas.addEventListener('pointercancel', onUp, {passive:false});
 canvas.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
-resize();
+// Başlatma sırası düzeltildi:
 renderCharGrid();
 renderMapGrid();
 updateStartScreenStats();
+resize();
 requestAnimationFrame(loop);
 
 })();
