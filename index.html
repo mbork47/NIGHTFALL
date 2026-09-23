@@ -38,20 +38,15 @@ canvas{display:block;touch-action:none;width:100%;height:100%}
 #waveBanner{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%) scale(0.3);font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:#ff6060;letter-spacing:4px;text-shadow:0 0 30px #ff2020, 0 4px 20px #000;transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);opacity:0;pointer-events:none;text-align:center;line-height:1.4}
 #waveBanner.show{transform:translate(-50%,-50%) scale(1);opacity:1}
 #waveBanner .sub{font-size:15px;color:#c0b090;letter-spacing:2px;margin-top:8px;font-family:'Rajdhani',sans-serif}
-
-/* PAUSE BUTONU */
 #pauseBtn{position:fixed;top:16px;right:16px;width:40px;height:40px;background:rgba(20,15,10,0.9);border:1px solid rgba(208,160,64,0.4);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#ffd166;z-index:25;cursor:pointer;pointer-events:auto;transition:all 0.2s;backdrop-filter:blur(4px);box-shadow:0 0 15px rgba(0,0,0,0.5)}
 #pauseBtn:hover{border-color:#ffd166;background:rgba(255,209,102,0.1);transform:scale(1.05)}
 #pauseBtn:active{transform:scale(0.95)}
-
-/* PAUSE MENÜSÜ */
 #pauseScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,3,5,0.95);z-index:150;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;pointer-events:auto;backdrop-filter:blur(12px)}
 #pauseScreen h1{font-family:'Cinzel',serif;font-size:36px;color:#ffd166;letter-spacing:6px;margin-bottom:20px;text-shadow:0 0 30px rgba(255,209,102,0.5)}
 #pauseScreen button{padding:14px 40px;font-family:'Cinzel',serif;font-size:16px;font-weight:900;color:#0a0508;background:linear-gradient(135deg,#ffd166,#ffb020);border:none;border-radius:14px;cursor:pointer;box-shadow:0 0 30px rgba(255,176,32,0.4);transition:all 0.25s;letter-spacing:1px;min-width:220px}
 #pauseScreen button:hover{transform:translateY(-3px);box-shadow:0 0 40px rgba(255,176,32,0.6)}
 #pauseScreen button.sec{background:rgba(30,20,15,0.8);color:#c0b090;box-shadow:none;font-size:14px;padding:12px 30px;font-family:'Rajdhani',sans-serif;font-weight:700;border:1px solid rgba(160,140,100,0.3)}
 #pauseScreen button.sec:hover{border-color:#ffd166;color:#ffd166}
-
 .screen{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,3,5,0.92);z-index:100;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;pointer-events:auto;overflow-y:auto;backdrop-filter:blur(8px)}
 #levelUpScreen h1{font-family:'Cinzel',serif;font-size:32px;color:#ffd166;letter-spacing:3px;margin-bottom:12px;text-shadow:0 0 30px rgba(255,209,102,0.5)}
 .upgradeCard{width:min(340px,90vw);padding:16px 20px;background:linear-gradient(135deg,rgba(60,40,80,0.8),rgba(40,20,50,0.6));border:1px solid rgba(160,100,200,0.4);border-radius:14px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.2s;backdrop-filter:blur(8px);box-shadow:0 4px 20px rgba(0,0,0,0.5)}
@@ -135,17 +130,12 @@ canvas{display:block;touch-action:none;width:100%;height:100%}
 <div id="toast"></div>
 <div id="weaponList"></div>
 </div>
-
-<!-- PAUSE BUTONU -->
 <div id="pauseBtn">⏸</div>
-
-<!-- PAUSE MENÜSÜ -->
 <div id="pauseScreen">
 <h1>DURAKLATILDI</h1>
 <button id="btnResume">DEVAM ET</button>
 <button class="sec" id="btnPauseMenu">ANA MENÜ</button>
 </div>
-
 <div id="startScreen">
 <h1>NIGHTFALL</h1>
 <div class="sub">SURVIVORS-LIKE</div>
@@ -247,7 +237,6 @@ function isMapUnlocked(map){
   return true;
 }
 
-// === ZEMİN DOKUSU (GELİŞMİŞ) ===
 var bgTile = 256, bgPattern = null;
 function buildBg(){
   if (W <= 0 || H <= 0) return;
@@ -256,14 +245,9 @@ function buildBg(){
   var tc = tile.getContext('2d');
   var m = MAPS[selectedMap];
   var env = m.envType;
-
-  // Ana zemin rengi
   tc.fillStyle = m.ground;
   tc.fillRect(0, 0, bgTile, bgTile);
-
-  // Doku detayları
   if (env === 'graveyard'){
-    // Toprak + çakıl
     for (var i=0;i<120;i++){
       tc.fillStyle = 'rgba(0,0,0,' + (0.1 + Math.random()*0.25) + ')';
       tc.beginPath(); tc.arc(Math.random()*bgTile, Math.random()*bgTile, 2+Math.random()*6, 0, Math.PI*2); tc.fill();
@@ -273,7 +257,6 @@ function buildBg(){
       tc.beginPath(); tc.arc(Math.random()*bgTile, Math.random()*bgTile, 1+Math.random()*3, 0, Math.PI*2); tc.fill();
     }
   } else if (env === 'forest'){
-    // Çimen
     for (var i=0;i<200;i++){
       var gx = Math.random()*bgTile, gy = Math.random()*bgTile;
       tc.strokeStyle = 'rgba(' + (40+Math.random()*40) + ',' + (80+Math.random()*60) + ',' + (30+Math.random()*30) + ',0.6)';
@@ -285,7 +268,6 @@ function buildBg(){
       tc.beginPath(); tc.arc(Math.random()*bgTile, Math.random()*bgTile, 5+Math.random()*10, 0, Math.PI*2); tc.fill();
     }
   } else if (env === 'desert'){
-    // Kum dalgaları
     for (var i=0;i<40;i++){
       tc.strokeStyle = 'rgba(200,170,120,' + (0.1 + Math.random()*0.15) + ')';
       tc.lineWidth = 1 + Math.random()*2;
@@ -302,7 +284,6 @@ function buildBg(){
       tc.fillRect(Math.random()*bgTile, Math.random()*bgTile, 1, 1);
     }
   } else if (env === 'frozen'){
-    // Kar taneleri
     for (var i=0;i<150;i++){
       tc.fillStyle = 'rgba(255,255,255,' + (0.1 + Math.random()*0.4) + ')';
       tc.beginPath(); tc.arc(Math.random()*bgTile, Math.random()*bgTile, 1+Math.random()*2, 0, Math.PI*2); tc.fill();
@@ -319,7 +300,6 @@ function buildBg(){
       tc.stroke();
     }
   } else if (env === 'crypt'){
-    // Taş zemin
     for (var i=0;i<80;i++){
       tc.fillStyle = 'rgba(' + (30+Math.random()*30) + ',' + (20+Math.random()*20) + ',' + (40+Math.random()*30) + ',0.5)';
       tc.fillRect(Math.random()*bgTile, Math.random()*bgTile, 8+Math.random()*15, 6+Math.random()*12);
@@ -332,7 +312,6 @@ function buildBg(){
       tc.stroke();
     }
   } else if (env === 'hell'){
-    // Lav çatlakları
     for (var i=0;i<15;i++){
       tc.strokeStyle = 'rgba(255,' + (60+Math.random()*80) + ',0,' + (0.3+Math.random()*0.4) + ')';
       tc.lineWidth = 1 + Math.random()*3;
@@ -351,17 +330,13 @@ function buildBg(){
       tc.beginPath(); tc.arc(Math.random()*bgTile, Math.random()*bgTile, 1+Math.random()*3, 0, Math.PI*2); tc.fill();
     }
   }
-
-  // Genel karanlık noktalar
   for (var i=0;i<10;i++){
     tc.fillStyle = 'rgba(0,0,0,0.1)';
     tc.beginPath(); tc.arc(Math.random()*bgTile, Math.random()*bgTile, 10+Math.random()*20, 0, Math.PI*2); tc.fill();
   }
-
   bgPattern = ctx.createPattern(tile, 'repeat');
 }
 
-// === ÇEVRE OBJELERİ ===
 var envObjects = [];
 function generateEnvObjects(){
   envObjects = [];
@@ -396,20 +371,14 @@ function drawEnvObject(o, camX, camY){
   if (sx < -100 || sx > W+100 || sy < -100 || sy > H+100) return;
   var t = o.type;
   var s = o.size;
-
   ctx.save();
   ctx.translate(sx, sy);
   ctx.rotate(o.rot);
-
-  // Gölge
   ctx.fillStyle = 'rgba(0,0,0,0.4)';
   ctx.beginPath(); ctx.ellipse(0, 8*s, 18*s, 6*s, 0, 0, Math.PI*2); ctx.fill();
-
   if (t === 'tree' || t === 'pineTree'){
-    // Ağaç gövdesi
     ctx.fillStyle = '#3a2a1a';
     ctx.fillRect(-4*s, -20*s, 8*s, 30*s);
-    // Yapraklar
     if (t === 'pineTree'){
       ctx.fillStyle = '#1a3a1a';
       for (var i=0;i<3;i++){
@@ -421,7 +390,6 @@ function drawEnvObject(o, camX, camY){
         ctx.lineTo(ww, yy + 5*s);
         ctx.closePath(); ctx.fill();
       }
-      // Kar
       ctx.fillStyle = 'rgba(255,255,255,0.7)';
       for (var i=0;i<3;i++){
         var yy = -25*s - i*15*s;
@@ -435,17 +403,14 @@ function drawEnvObject(o, camX, camY){
       ctx.beginPath(); ctx.arc(-8*s, -20*s, 12*s, 0, Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.arc(10*s, -22*s, 14*s, 0, Math.PI*2); ctx.fill();
     }
-  }
-  else if (t === 'deadTree'){
+  } else if (t === 'deadTree'){
     ctx.fillStyle = '#3a2a1a';
     ctx.fillRect(-3*s, -25*s, 6*s, 35*s);
-    // Dallar
     ctx.strokeStyle = '#3a2a1a'; ctx.lineWidth = 3*s; ctx.lineCap = 'round';
     ctx.beginPath(); ctx.moveTo(0, -15*s); ctx.lineTo(-15*s, -30*s); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(0, -20*s); ctx.lineTo(12*s, -35*s); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(0, -10*s); ctx.lineTo(-10*s, -20*s); ctx.stroke();
-  }
-  else if (t === 'rock' || t === 'iceRock' || t === 'lavaRock'){
+  } else if (t === 'rock' || t === 'iceRock' || t === 'lavaRock'){
     var rockCol = t === 'iceRock' ? '#8aaac0' : t === 'lavaRock' ? '#5a1a1a' : '#4a4a4a';
     ctx.fillStyle = rockCol;
     ctx.beginPath();
@@ -455,7 +420,6 @@ function drawEnvObject(o, camX, camY){
     ctx.lineTo(15*s, -5*s);
     ctx.lineTo(12*s, 8*s);
     ctx.closePath(); ctx.fill();
-    // Highlight
     ctx.fillStyle = 'rgba(255,255,255,0.15)';
     ctx.beginPath();
     ctx.moveTo(-8*s, -8*s);
@@ -467,11 +431,9 @@ function drawEnvObject(o, camX, camY){
       ctx.beginPath(); ctx.arc(-3*s, -3*s, 2*s, 0, Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.arc(5*s, 0, 2*s, 0, Math.PI*2); ctx.fill();
     }
-  }
-  else if (t === 'grave'){
+  } else if (t === 'grave'){
     ctx.fillStyle = '#5a5a5a';
     ctx.fillRect(-10*s, -8*s, 20*s, 16*s);
-    // Mezar taşı
     ctx.fillStyle = '#7a7a7a';
     ctx.beginPath();
     ctx.moveTo(-8*s, -8*s);
@@ -479,27 +441,23 @@ function drawEnvObject(o, camX, camY){
     ctx.arc(0, -22*s, 8*s, Math.PI, 0);
     ctx.lineTo(8*s, -8*s);
     ctx.closePath(); ctx.fill();
-    // Haç
     ctx.fillStyle = '#4a4a4a';
     ctx.fillRect(-1.5*s, -22*s, 3*s, 12*s);
     ctx.fillRect(-5*s, -19*s, 10*s, 3*s);
-  }
-  else if (t === 'bush'){
+  } else if (t === 'bush'){
     ctx.fillStyle = '#2a4a2a';
     ctx.beginPath(); ctx.arc(-8*s, 0, 10*s, 0, Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(8*s, 0, 10*s, 0, Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(0, -5*s, 12*s, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = '#1a3a1a';
     ctx.beginPath(); ctx.arc(0, -2*s, 8*s, 0, Math.PI*2); ctx.fill();
-  }
-  else if (t === 'cactus'){
+  } else if (t === 'cactus'){
     ctx.fillStyle = '#2a5a2a';
     ctx.fillRect(-4*s, -25*s, 8*s, 35*s);
     ctx.fillRect(-14*s, -18*s, 5*s, 15*s);
     ctx.fillRect(9*s, -22*s, 5*s, 15*s);
     ctx.fillRect(-14*s, -18*s, 14*s, 5*s);
     ctx.fillRect(9*s, -22*s, 10*s, 5*s);
-    // Dikenler
     ctx.strokeStyle = '#1a3a1a'; ctx.lineWidth = 1;
     for (var i=0;i<5;i++){
       ctx.beginPath();
@@ -507,8 +465,7 @@ function drawEnvObject(o, camX, camY){
       ctx.lineTo(-7*s, -20*s + i*5*s);
       ctx.stroke();
     }
-  }
-  else if (t === 'skull'){
+  } else if (t === 'skull'){
     ctx.fillStyle = '#d0c8b0';
     ctx.beginPath(); ctx.arc(0, 0, 8*s, 0, Math.PI*2); ctx.fill();
     ctx.fillRect(-6*s, 0, 12*s, 6*s);
@@ -517,8 +474,7 @@ function drawEnvObject(o, camX, camY){
     ctx.beginPath(); ctx.arc(3*s, -2*s, 2*s, 0, Math.PI*2); ctx.fill();
     ctx.fillRect(-2*s, 4*s, 1.5*s, 3*s);
     ctx.fillRect(0.5*s, 4*s, 1.5*s, 3*s);
-  }
-  else if (t === 'snowman'){
+  } else if (t === 'snowman'){
     ctx.fillStyle = '#e0f0ff';
     ctx.beginPath(); ctx.arc(0, 5*s, 12*s, 0, Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(0, -8*s, 9*s, 0, Math.PI*2); ctx.fill();
@@ -530,20 +486,17 @@ function drawEnvObject(o, camX, camY){
     ctx.beginPath();
     ctx.moveTo(0, -17*s); ctx.lineTo(4*s, -16*s); ctx.lineTo(0, -15*s);
     ctx.closePath(); ctx.fill();
-  }
-  else if (t === 'pillar'){
+  } else if (t === 'pillar'){
     ctx.fillStyle = '#4a4a5a';
     ctx.fillRect(-8*s, -35*s, 16*s, 40*s);
     ctx.fillStyle = '#6a6a7a';
     ctx.fillRect(-10*s, -38*s, 20*s, 5*s);
     ctx.fillRect(-10*s, 2*s, 20*s, 5*s);
-    // Çatlak
     ctx.strokeStyle = 'rgba(0,0,0,0.4)'; ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(-3*s, -30*s); ctx.lineTo(2*s, -15*s); ctx.lineTo(-1*s, -5*s);
     ctx.stroke();
-  }
-  else if (t === 'bone'){
+  } else if (t === 'bone'){
     ctx.fillStyle = '#d0c8b0';
     ctx.save();
     ctx.rotate(Math.random()*Math.PI);
@@ -554,7 +507,6 @@ function drawEnvObject(o, camX, camY){
     ctx.beginPath(); ctx.arc(12*s, 2*s, 3*s, 0, Math.PI*2); ctx.fill();
     ctx.restore();
   }
-
   ctx.restore();
 }
 
@@ -653,11 +605,9 @@ function drawEnemy(e, camX, camY){
   var r = e.radius;
   var bob = (e.frame % 2 === 0) ? 0 : -2;
   var scale = e.isBoss ? 2.2 : e.isElite ? 1.5 : 1.0;
-
   ctx.save();
   ctx.translate(x, y);
   ctx.scale(scale, scale);
-
   if (e.isBoss){
     var auraGrad = ctx.createRadialGradient(0,0,r*0.5,0,0,r+25);
     auraGrad.addColorStop(0,'rgba(255,50,50,0.4)');
@@ -671,12 +621,9 @@ function drawEnemy(e, camX, camY){
     ctx.fillStyle = auraGrad2;
     ctx.beginPath(); ctx.arc(0, 0, r+15, 0, Math.PI*2); ctx.fill();
   }
-
   ctx.fillStyle = 'rgba(0,0,0,0.4)';
   ctx.beginPath(); ctx.ellipse(0, r-2, r*0.9, r*0.3, 0, 0, Math.PI*2); ctx.fill();
-
   var t = e.type;
-
   if (t === 'zombie' || t === 'mummy' || t === 'cryptWorm' || t === 'vine'){
     ctx.fillStyle = P.head;
     ctx.fillRect(-5, 2+bob, 4, 12);
@@ -709,8 +656,7 @@ function drawEnemy(e, camX, camY){
       ctx.beginPath(); ctx.moveTo(-8, -10+bob); ctx.lineTo(-14, -18+bob); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(8, -10+bob); ctx.lineTo(14, -18+bob); ctx.stroke();
     }
-  }
-  else if (t === 'skeleton' || t === 'iceSkel' || t === 'skullDemon'){
+  } else if (t === 'skeleton' || t === 'iceSkel' || t === 'skullDemon'){
     ctx.fillStyle = P.body;
     ctx.fillRect(-5, 2+bob, 4, 12);
     ctx.fillRect(1, 2+bob, 4, 12);
@@ -733,8 +679,7 @@ function drawEnemy(e, camX, camY){
       ctx.moveTo(7, -22+bob); ctx.lineTo(12, -30+bob); ctx.lineTo(4, -24+bob);
       ctx.closePath(); ctx.fill();
     }
-  }
-  else if (t === 'ghost'){
+  } else if (t === 'ghost'){
     ctx.fillStyle = P.body;
     ctx.beginPath();
     ctx.arc(0, -8+bob, 12, Math.PI, 0);
@@ -746,8 +691,7 @@ function drawEnemy(e, camX, camY){
     ctx.fillStyle = P.eye;
     ctx.beginPath(); ctx.arc(-4, -10+bob, 2, 0, Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(4, -10+bob, 2, 0, Math.PI*2); ctx.fill();
-  }
-  else if (t === 'rotwolf' || t === 'snowWolf' || t === 'hellHound'){
+  } else if (t === 'rotwolf' || t === 'snowWolf' || t === 'hellHound'){
     ctx.fillStyle = P.body;
     ctx.beginPath(); ctx.ellipse(0, 0+bob, r*1.1, r*0.7, 0, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = P.head;
@@ -763,8 +707,7 @@ function drawEnemy(e, camX, camY){
     ctx.fillStyle = '#fff';
     ctx.fillRect(-r*0.1, -r*0.4+bob, 2, 3);
     ctx.fillRect(r*0.1, -r*0.4+bob, 2, 3);
-  }
-  else if (t === 'treant' || t === 'frostGiant'){
+  } else if (t === 'treant' || t === 'frostGiant'){
     ctx.fillStyle = P.body;
     ctx.fillRect(-r*0.6, -r*0.2+bob, r*0.4, r*1.0);
     ctx.fillRect(r*0.2, -r*0.2+bob, r*0.4, r*1.0);
@@ -777,8 +720,7 @@ function drawEnemy(e, camX, camY){
     ctx.fillStyle = P.eye || '#000';
     ctx.beginPath(); ctx.arc(-r*0.35, -r*1.1+bob, r*0.15, 0, Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(r*0.35, -r*1.1+bob, r*0.15, 0, Math.PI*2); ctx.fill();
-  }
-  else if (t === 'scorpion'){
+  } else if (t === 'scorpion'){
     ctx.fillStyle = P.body;
     ctx.beginPath(); ctx.ellipse(0, 0+bob, r*1.2, r*0.7, 0, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = P.head;
@@ -790,8 +732,7 @@ function drawEnemy(e, camX, camY){
     ctx.fillStyle = '#000';
     ctx.beginPath(); ctx.arc(r*0.6, -r*0.2+bob, 1.5, 0, Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(r*0.9, -r*0.2+bob, 1.5, 0, Math.PI*2); ctx.fill();
-  }
-  else if (t === 'bat'){
+  } else if (t === 'bat'){
     ctx.fillStyle = P.body;
     ctx.beginPath(); ctx.arc(0, 0+bob, r*0.6, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = P.extra;
@@ -803,8 +744,7 @@ function drawEnemy(e, camX, camY){
     ctx.fillStyle = P.eye || '#000';
     ctx.beginPath(); ctx.arc(-r*0.2, -r*0.1+bob, 1.5, 0, Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(r*0.2, -r*0.1+bob, 1.5, 0, Math.PI*2); ctx.fill();
-  }
-  else if (t === 'sandDemon' || t === 'flameImp' || t === 'emberDemon'){
+  } else if (t === 'sandDemon' || t === 'flameImp' || t === 'emberDemon'){
     ctx.fillStyle = P.head;
     ctx.fillRect(-5, 2+bob, 4, 12);
     ctx.fillRect(1, 2+bob, 4, 12);
@@ -822,8 +762,7 @@ function drawEnemy(e, camX, camY){
     ctx.beginPath(); ctx.arc(3, -16+bob, 2, 0, Math.PI*2); ctx.fill();
     ctx.strokeStyle = P.body; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(0, 4+bob); ctx.quadraticCurveTo(8, 12+bob, 4, 18+bob); ctx.stroke();
-  }
-  else {
+  } else {
     ctx.fillStyle = P.body;
     ctx.beginPath(); ctx.arc(0, 0+bob, r, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = P.head;
@@ -832,7 +771,6 @@ function drawEnemy(e, camX, camY){
     ctx.beginPath(); ctx.arc(-r*0.3, -r*0.2+bob, r*0.18, 0, Math.PI*2); ctx.fill();
     ctx.beginPath(); ctx.arc(r*0.3, -r*0.2+bob, r*0.18, 0, Math.PI*2); ctx.fill();
   }
-
   if (e.isBoss){
     ctx.fillStyle = '#ffd166';
     ctx.shadowColor = '#ffd166'; ctx.shadowBlur = 10;
@@ -848,13 +786,11 @@ function drawEnemy(e, camX, camY){
     ctx.moveTo(-r*0.5, -r*1.4); ctx.lineTo(0, -r*1.8); ctx.lineTo(r*0.5, -r*1.4);
     ctx.closePath(); ctx.fill();
   }
-
   if (e.hitFlash > 0){
     ctx.fillStyle = 'rgba(255,220,220,' + Math.min(0.8, e.hitFlash*4) + ')';
     ctx.beginPath(); ctx.arc(0, 0+bob, r*1.2, 0, Math.PI*2); ctx.fill();
   }
   ctx.restore();
-
   if (e.isBoss || e.isElite || e.hp < e.maxHp){
     var bw = r*2.5*scale, bh = 3, by = y - r*scale - 12;
     ctx.fillStyle = 'rgba(0,0,0,0.75)';
@@ -947,7 +883,6 @@ var now = 0, playerAnimFrame = 0, playerAnimTimer = 0;
 var wave = 1, currentWaveTypes = [];
 var currentMap = MAPS[0];
 var bossMechanicTimer = 0;
-var pausedAt = 0, pauseTotal = 0;
 
 var CHARACTERS = [
   { id:'warrior', spriteType:'warrior', name:'Savaşçı', emoji:'⚔️', weapon:'knife', desc:'Bıçak - Tank', hp:140, speed:200, damageMult:0.95 },
@@ -987,7 +922,6 @@ var EVOLUTIONS = {
   flameSword: { passive:'damage', name:'Alev Fırtınası' }
 };
 
-// === PAUSE FONKSİYONLARI ===
 function pauseGame(){
   if (STATE !== 'playing') return;
   STATE = 'paused';
@@ -1103,7 +1037,6 @@ function updateWeapons(dt){
       }
     }
   }
-
   w = weapons.spear;
   if (w && w.level > 0){
     w.timer -= dt*1000;
@@ -1116,7 +1049,6 @@ function updateWeapons(dt){
       }
     }
   }
-
   w = weapons.fireball;
   if (w && w.level > 0){
     w.timer -= dt*1000;
@@ -1129,7 +1061,6 @@ function updateWeapons(dt){
       }
     }
   }
-
   w = weapons.lightning;
   if (w && w.level > 0){
     w.timer -= dt*1000;
@@ -1146,7 +1077,6 @@ function updateWeapons(dt){
       }
     }
   }
-
   w = weapons.boomerang;
   if (w && w.level > 0){
     w.timer -= dt*1000;
@@ -1161,7 +1091,6 @@ function updateWeapons(dt){
       }
     }
   }
-
   w = weapons.poison;
   if (w && w.level > 0){
     w.timer -= dt*1000;
@@ -1175,7 +1104,6 @@ function updateWeapons(dt){
       }
     }
   }
-
   w = weapons.hammer;
   if (w && w.level > 0){
     w.timer -= dt*1000;
@@ -1187,7 +1115,6 @@ function updateWeapons(dt){
       }
     }
   }
-
   w = weapons.iceSpear;
   if (w && w.level > 0){
     w.timer -= dt*1000;
@@ -1200,7 +1127,6 @@ function updateWeapons(dt){
       }
     }
   }
-
   w = weapons.flameSword;
   if (w && w.level > 0){
     w.timer -= dt*1000;
@@ -1814,12 +1740,9 @@ function render(){
     ctx.fillStyle = currentMap.ground;
     ctx.fillRect(0, 0, W, H);
   }
-
-  // Çevre objeleri (zemin üstü, düşman altı)
   for (var i=0;i<envObjects.length;i++){
     drawEnvObject(envObjects[i], camX, camY);
   }
-
   for (var i=0;i<particles.length;i++){
     var p = particles[i];
     var sx = p.x - camX, sy = p.y - camY;
@@ -1861,7 +1784,6 @@ function render(){
       ctx.globalAlpha = 1;
     }
   }
-
   for (var i=0;i<gems.length;i++){
     var g = gems[i];
     var sx = g.x - camX, sy = g.y - camY;
@@ -1874,7 +1796,6 @@ function render(){
     ctx.fillStyle = col;
     ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI*2); ctx.fill();
   }
-
   for (var i=0;i<chests.length;i++){
     var c = chests[i];
     var sx = c.x - camX, sy = c.y - camY;
@@ -1898,14 +1819,12 @@ function render(){
     ctx.fillStyle = glowColor; ctx.fillRect(-3, -3, 6, 6);
     ctx.restore();
   }
-
   for (var i=0;i<enemies.length;i++){
     var e = enemies[i];
     var sx = e.x - camX, sy = e.y - camY;
     if (sx < -100 || sx > W+100 || sy < -100 || sy > H+100) continue;
     drawEnemy(e, camX, camY);
   }
-
   for (var i=0;i<bullets.length;i++){
     var b = bullets[i];
     var sx = b.x - camX, sy = b.y - camY;
@@ -1960,7 +1879,6 @@ function render(){
       ctx.restore();
     }
   }
-
   for (var i=0;i<particles.length;i++){
     var p = particles[i];
     if (p.type === 'spark'){
@@ -1986,7 +1904,6 @@ function render(){
     }
   }
   ctx.globalAlpha = 1;
-
   var px2 = player.x - camX, py2 = player.y - camY;
   if (comboActive > 0){
     ctx.strokeStyle = 'rgba(255,176,32,'+(0.5+Math.sin(now*0.01)*0.3)+')';
@@ -2003,7 +1920,6 @@ function render(){
     ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(px2, py2, player.radius+8, 0, Math.PI*2); ctx.stroke();
   }
-
   if (input.active && input.mag > 0.1){
     ctx.strokeStyle = 'rgba(200,180,140,0.25)';
     ctx.lineWidth = 2;
@@ -2013,9 +1929,7 @@ function render(){
     ctx.beginPath(); ctx.arc(W/2+input.dx*50, H/2+input.dy*50, 18, 0, Math.PI*2); ctx.fill();
     ctx.shadowBlur = 0;
   }
-
   if (vignetteCanvas){ ctx.drawImage(vignetteCanvas, 0, 0, W, H); }
-
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   for (var i=0;i<damageNumbers.length;i++){
     var d = damageNumbers[i];
@@ -2085,14 +1999,15 @@ function loop(t){
     updateComboTimer(dt);
     updateBossBar();
     updateUI();
-    if (shake > 0.3) shake *= 0.85; else shake = 0;
+    if (shake >];
+ 0.3) shake *= 0.85; else    shake = 0;
   }
-  if (STATE === 'playing' || STATE === 'levelup' || STATE === 'gameover' || STATE === 'paused'){ render(); }
+  var if (STATE === 'playing' || STATE card === 'levelup' || STATE === 'gameover' || STATE === 'p =aused'){ render(); }
 }
 
-functionFlash resetGame(){
-  gameTime = 0; kills = = 0; goldCollected =  0;
-  enemies = [0]; bullets = []; gems = [;]; damageNumbers = [];
+function resetGame(){
+  gameTime = 0; kills = 0; goldCollected = 0;
+  enemies = []; bullets = []; gems = []; damageNumbers = [];
   particles = []; chests = [];
   enemySpawnTimer = 0; nextBossTime = 45000; activeBoss = null;
   nextMilestone = 60; lastKillTime = 0; killStreak = 0; comboActive = 0; shake = 0;
@@ -2115,7 +2030,7 @@ functionFlash resetGame(){
   player.hp = player.maxHp;
   player.speed = ch.speed + metaSpeed;
   player.level = 1; player.xp = 0; player.xpNext = 5;
-  player.invulnUntil = 0; player.hit player.facing = 1;
+  player.invulnUntil = 0; player.hitFlash = 0; player.facing = 1;
   player.damageMult = ch.damageMult * metaDmg;
   player.cooldownMult = metaCd;
   player.critChance = metaCrit;
@@ -2192,8 +2107,7 @@ function renderCharGrid(){
   if (!grid) return;
   grid.innerHTML = '';
   for (var i=0;i<CHARACTERS.length;i++){
-    var c = CHARACTERS[i];
-    var card = document.createElement('div');
+    var c = CHARACTERS[i document.createElement('div');
     card.className = 'charCard' + (i === selectedChar ? ' selected' : '');
     card.innerHTML = '<div class="emoji">'+c.emoji+'</div>'+'<div class="name">'+c.name+'</div>'+'<div class="wep">'+c.desc+'</div>';
     (function(idx){ card.addEventListener('click', function(){ Snd.click(); selectedChar = idx; renderCharGrid(); }); })(i);
@@ -2314,6 +2228,7 @@ canvas.addEventListener('pointerup', onUp, {passive:false});
 canvas.addEventListener('pointercancel', onUp, {passive:false});
 canvas.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
+// === BAŞLATMA (DOĞRU SIRALAMA) ===
 renderCharGrid();
 renderMapGrid();
 updateStartScreenStats();
